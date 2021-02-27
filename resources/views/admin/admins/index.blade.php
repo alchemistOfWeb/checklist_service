@@ -3,8 +3,16 @@
 @section('content')
     <h2>admins</h2>
     <hr>
+    
+    <a 
+    href="{{route('admins.create')}}" 
+    class="btn btn-success border
+    @nopermission('create-admins')
+        disabled
+    @endpermission
+    "
+    >create admin</a>
 
-    <a href="{{route('admins.create')}}" class="btn btn-success border">create admin</a>
     <table class="table table-striped table-inverse table-responsive py-4 table-hover">
         <tfoot>
             <tr>
@@ -38,7 +46,12 @@
                             @csrf
                             <button 
                             type="submit" 
-                            class="close text-danger" 
+                            @haspermission('deleting-users')
+                                class="close text-danger"
+                            @elsepermission
+                                class="close text-secondary"
+                                disabled
+                            @endpermission
                             aria-label="Close"
                             onclick="return confirm('are you sure?')">
                                 <span aria-hidden="true">&times;</span>
@@ -46,7 +59,14 @@
                         </form>
                     </td>
                     <td class="bg-light" style="border-top: 0px;">
-                        <a class="close edit text-primary" 
+                        <a 
+                        class="close edit 
+                        @haspermission('edit-admins')
+                            text-primary
+                        @elsepermission 
+                            text-secondary disabled 
+                        @endpermission
+                        " 
                         href="{{route('admins.edit', $admin->id)}}" 
                         aria-label="Close">
                             <span aria-hidden="true">&#9998;</span>

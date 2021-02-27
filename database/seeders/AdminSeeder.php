@@ -19,11 +19,11 @@ class AdminSeeder extends Seeder
     {
         Admin::factory(20)->create();
 
-        $super = Role::where('slug', 'super')->first();
+        $super = Role::where('slug', 'super-admin')->first();
 
         $admin = new Admin();
         $admin->name = 'Super Admin';
-        $admin->email = 'oran@smith.com';
+        $admin->email = 'super@supermail.com';
         $admin->email_verified_at = now();
         $admin->password = Hash::make('root');
         $admin->save();

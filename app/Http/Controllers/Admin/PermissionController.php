@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PermissionController extends Controller
 {
@@ -28,6 +29,12 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->hasPermissionTo('edit-permissions') ) {
+            abort(403, "You don't have permission to edit permissions");
+        }
+
         $request->validate([
             'name' => 'required|string|between:3,255'
         ]);
@@ -46,6 +53,12 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->hasPermissionTo('edit-permissions') ) {
+            abort(403, "You don't have permission to edit permissions");
+        }
+
         $request->validate([
             'name' => 'required|string|between:3,255',
             'permissions' =>'array',
@@ -64,6 +77,12 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->hasPermissionTo('edit-permissions') ) {
+            abort(403, "You don't have permission to edit permissions");
+        }
+
         Permission::find($id)->delete();
 
         return redirect()->route('permissions.index');

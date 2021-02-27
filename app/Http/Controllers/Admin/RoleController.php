@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -28,6 +29,12 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->hasPermissionTo('edit-roles') ) {
+            abort(403, "You don't have permission to edit roles");
+        }
+
         $permissions = Permission::all();
 
         return view('admin.roles.create', ['permissions' => $permissions]);
@@ -41,6 +48,12 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->hasPermissionTo('edit-roles') ) {
+            abort(403, "You don't have permission to edit roles");
+        }
+
         $request->validate([
             'name' => 'required|string|between:3,255',
             'permissions' =>'array|exists:permissions,id',
@@ -60,6 +73,13 @@ class RoleController extends Controller
     public function edit($id)
     {
         // $permissions = Permission::all();
+        
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->hasPermissionTo('edit-roles') ) {
+            abort(403, "You don't have permission to edit roles");
+        }
+
         $role = Role::find($id);
 
         $ids = $role->permissions->map(function($el){
@@ -102,6 +122,12 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->hasPermissionTo('edit-roles') ) {
+            abort(403, "You don't have permission to edit roles");
+        }
+        
         Role::find($id)->delete();
         return redirect()->route('roles.index');
     }

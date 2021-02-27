@@ -16,7 +16,7 @@ class Checklist extends Model
 
     protected $table = "checklists";
 
-    protected $fillable = ['title', 'options'];
+    protected $fillable = ['title', 'description'];
 
     protected $casts = [
         'options' => 'array',
@@ -36,28 +36,39 @@ class Checklist extends Model
      * }
      * @return Checklist
      */
-    public static function create($uid, $fields)
+    public static function create($fields)
     {
-
-        
         // if ($user->num_of_checklists >= $user->limit_of_checklists) {
         //     abort(403, 'limit is exceeded');
         // }
-        $user = Auth::guard('user')->user();
-        $uid = $user->id;
         
+        $user = auth()->user();
+        $user->increment('num_of_checklists');
+        $user->save();
+
         $checklist = new static;
-        $user = $checklist->user;
         $checklist->fill($fields);
-        $checklist->user_id = $uid;
+        $checklist->options = 
+            array_map(function($item) use($checklist){
+                if (!isset($item['title'])) {
+                    return;
+                }
+
+                return [
+                    'tid' => $checklist->task_increment,
+                    'title' => $item['title'],
+                    'is_done' => self::TASK_ISNT_DONE,
+                ];
+            }, $fields['options']);
+
+        $checklist->user_id = $user->id;
         $checklist->save();
 
-
-        $user->num_of_checklists++;
-        $user->save();
+        
         
         return $checklist;
     }
+
 
     /**
      * Create a new checklist.

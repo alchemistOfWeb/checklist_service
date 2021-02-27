@@ -8,24 +8,34 @@
 
     <form class="form-inline" action="{{route('permissions.store')}}" method="post">
         @csrf
-        <div class="form-group mr-sm-3 mb-2 ">
+        <div class="form-group mr-sm-3 mb-2">
             <input 
             type="text" 
             class="form-control"
             name="name"
             id="addPermission" 
             placeholder="permission name"
+            @nopermission('edit-permissions')
+                disabled
+            @endpermission
             >
         </div>
 
-        <button type="submit" class="btn btn-success border mb-2">create permission</button>
+        <button 
+        type="submit" 
+        class="btn btn-success border mb-2" 
+        @nopermission('edit-permissions')
+            disabled
+        @endpermission
+        >
+            create permission
+        </button>
     </form>
     
     <table class="table table-striped table-inverse table-responsive py-4 table-hover">
         <tfoot>
             <tr>
-                <td colspan="6">
-                    
+                <td colspan="4">
                     @include('includes.pagination', ['paginator' => $permissions])
                 </td>
             </tr>
@@ -66,7 +76,12 @@
                             @csrf
                             <button 
                             type="submit" 
-                            class="close text-danger" 
+                            @haspermission('edit-permissions')
+                                class="close text-danger"
+                            @elsepermission
+                                class="close text-secondary"
+                                disabled
+                            @endpermission
                             aria-label="Close"
                             onclick="return confirm('are you sure?')">
                                 <span aria-hidden="true">&times;</span>
@@ -74,23 +89,29 @@
                         </form>
                     </td>
                     <td class="bg-light" style="border-top: 0px;">
-                        <a class="close edit text-primary" style="cursor: pointer;"
-                        {{-- href="{{route('permissions.edit', $permission->id)}}"  --}}
+                        <a 
                         aria-label="Close"
-                        onclick="
-                            $permissionForm = $('#permission-form-{{$permission->id}}');
-                            $permissionName = $('#permission-name-{{$permission->id}}');
-                            $permissionName.toggleClass('form-control-plaintext');
-                            $permissionName.toggleClass('form-control');
+                        @haspermission('edit-permissions')
+                            class="close edit text-primary" 
+                            style="cursor: pointer;"
+                            onclick="
+                                $permissionForm = $('#permission-form-{{$permission->id}}');
+                                $permissionName = $('#permission-name-{{$permission->id}}');
+                                $permissionName.toggleClass('form-control-plaintext');
+                                $permissionName.toggleClass('form-control');
 
-                            if ($permissionForm.attr('hidden')) {
-                                $permissionForm.attr('hidden', false);
-                                $permissionName.attr('readonly', false);
-                            } else {
-                                $permissionForm.attr('hidden', true);
-                                $permissionName.attr('readonly', true);
-                            }
-                        "
+                                if ($permissionForm.attr('hidden')) {
+                                    $permissionForm.attr('hidden', false);
+                                    $permissionName.attr('readonly', false);
+                                } else {
+                                    $permissionForm.attr('hidden', true);
+                                    $permissionName.attr('readonly', true);
+                                }
+                            "
+                        @elsepermission
+                            class="close edit text-secondary"
+                            disabled
+                        @endpermission
                         >
                             <span aria-hidden="true">&#9998;</span>
                         </a>

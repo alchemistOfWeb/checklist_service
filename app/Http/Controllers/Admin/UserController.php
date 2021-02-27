@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -31,6 +32,12 @@ class UserController extends Controller
      */
     public function create()
     {
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->hasPermissionTo('create-users')) {
+            abort(403, "You don't have permission to create users");
+        }
+
         return view('admin.users.create');
     }
 
@@ -42,7 +49,14 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->hasPermissionTo('create-users') ) {
+            abort(403, "You don't have permission to create users");
+        }
+
         User::create($request->all());
+
         return redirect()->route('users.index');
     }
 
@@ -83,7 +97,22 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $admin = Auth::guard('admin')->user();
         $user = User::find($id);
+
+        if (!$admin->hasPermissionTo('edit-users') 
+            && 
+            ($request->name != $user->name || $request->email != $user->email)) {
+            
+            abort(403, "You don't have permission to edit users");
+        }
+
+        if (!$admin->hasPermissionTo('limiting-user-checklists') 
+            && 
+            $request->limit_of_checklists != $user->limit_of_checklists) {
+            
+            abort(403, "You don't have permission to limiting user checklists");
+        }
 
         $request->validate([
             'name' => 'required|between:4,64',
@@ -95,6 +124,9 @@ class UserController extends Controller
         ]);
 
         $user->fill($request->all());
+
+        
+        
         $user->limit_of_checklists = $request->limit_of_checklists;
         $user->save();
 
@@ -103,6 +135,12 @@ class UserController extends Controller
 
     public function toggleStatus($id) 
     {
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->hasPermissionTo('banning-users') ) {
+            abort(403, "You don't have permission to banning users");
+        }
+
         User::find($id)->toggleStatus();
         
         return redirect()->back();
@@ -116,6 +154,12 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->hasPermissionTo('deleting-users') ) {
+            abort(403, "You don't have permission to deleting users");
+        }
+
         User::find($id)->delete();
         return redirect()->back();
     }

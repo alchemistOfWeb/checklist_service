@@ -15,7 +15,11 @@
             <div class="d-flex flex-wrap" id="role-list">  
                 
             </div>
-            <select class="custom-select my-1 mr-sm-2" id="select-roles">
+            <select class="custom-select my-1 mr-sm-2" id="select-roles"
+            @nopermission('manage-admin-roles')
+                disabled
+            @endpermission
+            >
                 <option value="0" selected>Choose role for admin...</option>
                 @foreach ($roles as $role)
                     <option 

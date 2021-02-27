@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Checklist;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ChecklistController extends Controller
 {
@@ -43,7 +44,7 @@ class ChecklistController extends Controller
     public function toggleTask($uid, $cid, $tid)
     {
         Checklist::find($cid)->toggleTask($tid);
-        return response()->json('', 200);
+        return response()->json('', 200);   
     }
 
     /**
@@ -76,8 +77,28 @@ class ChecklistController extends Controller
      */
     public function createChecklist($uid, Request $request)
     {
-        // $checklist = Checklist::create($request->all());
-        // return response()->json($checklist, 201);
+        $validator = Validator::make($request->all(), [
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['string', 'max:500'],
+            'options' => ['array'],
+        ]);    
+        
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+
+        $user = $request->user();
+
+        if ( $user->num_of_checklists >= $user->limit_of_checklists ) {
+            return response()->json(['error' => "limit of checklists is exceeded"], 403);
+        }
+
+        $checklist = Checklist::create($request->only('title', 'description', 'options'));
+
+        // $checklist = $user->checklists->create($request->only('title', 'description', 'options'));
+        // $checklist = $user->increment('num_of_checklists');
+        
+        return response()->json($checklist, 201);
     }
 
     /**

@@ -4,7 +4,12 @@
                 <li class="page-item 
                 @if($paginator->onFirstPage()) disabled @endif"
                 >
-                    <a class="page-link" href="{{$paginator->previousPageUrl()}}" tabindex="-1">Prev</a>
+                    <a class="page-link" href="{{$paginator->url(1)}}" tabindex="-1">Frst</a>
+                </li>
+                <li class="page-item 
+                @if($paginator->onFirstPage()) disabled @endif"
+                >
+                    <a class="page-link" href="{{$paginator->previousPageUrl()}}" tabindex="-1">prev</a>
                 </li>
                 <?php
                     $num_side_links = 1;
@@ -12,8 +17,7 @@
                     $first_item = $paginator->currentPage() - $num_side_links;
                     $last_item = $paginator->currentPage() + $num_side_links;
 
-                    $current_page_list 
-                        = range($first_item, $last_item);
+                    $current_page_list = range($first_item, $last_item);
                     
                     $mod = 0;
 
@@ -50,7 +54,12 @@
                 <li class="page-item
                 @if($paginator->currentPage() == $paginator->lastPage()) disabled @endif"
                 >
-                    <a class="page-link" href="{{$paginator->nextPageUrl()}}">Next</a>
+                    <a class="page-link" href="{{$paginator->nextPageUrl()}}">next</a>
+                </li>
+                <li class="page-item
+                @if($paginator->currentPage() == $paginator->lastPage()) disabled @endif"
+                >
+                    <a class="page-link" href="{{$paginator->url($paginator->lastPage())}}">Last</a>
                 </li>
             </ul>
         </nav>

@@ -31,6 +31,10 @@ class PermissionServiceProvider extends ServiceProvider
         Blade::directive('haspermission', function ($permission) {
             return "<?php if ( Auth::guard('admin')->user()->hasPermissionTo($permission) )  { ?>";
         });
+        
+        Blade::directive('nopermission', function ($permission) {
+            return "<?php if ( !(Auth::guard('admin')->user()->hasPermissionTo($permission)) )  { ?>";
+        });
 
         Blade::directive('elsepermission', function ($permission) {
             return "<?php } else { ?>";

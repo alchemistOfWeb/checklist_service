@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\ChecklistController;
+use App\Http\Controllers\API\LoginController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,11 +17,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::name('api.')->group(function(){
+
+// login user
+Route::post('login', [LoginController::class, 'login'])
+    ->name('login');
+
+// register user
+Route::post('register', [LoginController::class, 'register'])
+    ->name('register');
+
+
+Route::group(['name' => 'api.', 'middleware' => 'auth:sanctum'], function(){
     
     // Route::apiResource('users', UserController::class);
     // Route::apiResource('users/{uid}/checklists', ChecklistController::class);
@@ -34,7 +45,7 @@ Route::name('api.')->group(function(){
         ->name('checklists.getTasks');
 
     // toggle task of checklist
-    Route::patch('users/{uid}/checklists/{cid}/tasks/{tid}', [ChecklistController::class, 'toggleTask'])
+    Route::match(['put', 'patch'], 'users/{uid}/checklists/{cid}/tasks/{tid}/toggle', [ChecklistController::class, 'toggleTask'])
         ->name('checklists.toggleTask');
 
     // create task in checklist
@@ -52,17 +63,10 @@ Route::name('api.')->group(function(){
     // delete checklist
     Route::delete('users/{uid}/checklists/{cid}', [ChecklistController::class, 'destroyChecklist'])
         ->name('checklists.destroyChecklist');
-
-    // login user
-    Route::post('login', [UserController::class, 'login'])
-        ->name('login');
-
-    // register user 
-    Route::post('signup', [UserController::class, 'register'])
-        ->name('register');
-
-
+        
 });
+
+
 
 // For example
 // Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function(){

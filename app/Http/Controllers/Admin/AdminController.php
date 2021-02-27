@@ -7,6 +7,7 @@ use App\Http\Requests\StoreAdminRequest;
 use App\Models\Admin;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
@@ -30,6 +31,12 @@ class AdminController extends Controller
      */
     public function create()
     {
+        $current_admin = Auth::guard('admin')->user();
+
+        if (!$current_admin->hasPermissionTo('create-admins') ) {
+            abort(403, "You don't have permission to create admins");
+        }
+
         $roles = Role::all();
         
         return view('admin.admins.create', [
@@ -45,6 +52,12 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+        $current_admin = Auth::guard('admin')->user();
+
+        if (!$current_admin->hasPermissionTo('create-admins') ) {
+            abort(403, "You don't have permission to create admins");
+        }
+
         $request->validate([
             'roles' =>'array',
             'roles.*' =>'exists:roles,id',
@@ -78,6 +91,12 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
+        $current_admin = Auth::guard('admin')->user();
+
+        if (!$current_admin->hasPermissionTo('edit-admins') ) {
+            abort(403, "You don't have permission to edit admins");
+        }
+
         $admin = Admin::find($id);
 
         $ids = $admin->roles->map(function($el){
@@ -102,6 +121,12 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $current_admin = Auth::guard('admin')->user();
+
+        if (!$current_admin->hasPermissionTo('edit-admins') ) {
+            abort(403, "You don't have permission to edit admins");
+        }
+
         $admin = Admin::find($id);
 
         $request->validate([
@@ -128,6 +153,12 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
+        $current_admin = Auth::guard('admin')->user();
+
+        if (!$current_admin->hasPermissionTo('deleting-admins') ) {
+            abort(403, "You don't have permission to deleting admins");
+        }
+
         Admin::find($id)->delete();
         return redirect()->route('admins.index');
     }

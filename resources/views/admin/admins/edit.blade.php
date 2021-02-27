@@ -18,12 +18,19 @@
                 @foreach ($admin->roles as $role)
 
                     <h4 class="m-1 attaching-block">
-                        <span class="badge badge-pill badge-primary">
+                        <span 
+                        class="badge badge-pill badge-primary
+                        @nopermission('manage-admin-roles')
+                            badge-secondary
+                        @endpermission
+                        ">
                             <span class="selected-option-name">{{$role->name}}</span>
                             <span 
                             class="rounded-circle bg-light text-dark px-1 ml-2 detach-option-btn" aria-hidden="true" 
-                            style="cursor: pointer;"
-                            onclick="fnDetachOption($(this), 'select-roles')"
+                            @haspermission('manage-admin-roles')
+                                style="cursor: pointer;"
+                                onclick="fnDetachOption($(this), 'select-roles')"
+                            @endpermission
                             >&times;</span>
                         </span>
                         <input type="text" name="roles[]" value="{{$role->id}}" class="attaching-option-hidden" hidden>
@@ -32,7 +39,11 @@
                 @endforeach
             </div>
             
-            <select class="custom-select my-1 mr-sm-2" id="select-roles">
+            <select class="custom-select my-1 mr-sm-2" id="select-roles" 
+            @nopermission('manage-admin-roles')
+                disabled
+            @endpermission
+            >
                 <option value="0" selected>Choose role for admin...</option>
                 @foreach ($roles as $role)
                     <option 

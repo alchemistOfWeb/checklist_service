@@ -113,7 +113,7 @@ class Admin extends Authenticatable
 
     public function hasPermission($permission)
     {
-        return (bool) $this->permission->where('slug', $permission)->count();
+        return (bool) $this->permissions->where('slug', $permission)->count();
     }
 
     /**

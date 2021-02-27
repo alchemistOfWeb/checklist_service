@@ -3,7 +3,14 @@
     <h2>users</h2>
     <hr>
     
-    <a href="{{route('users.create')}}" class="btn btn-success border">create user</a>
+    <a 
+    href="{{route('users.create')}}" 
+    class="btn btn-success border
+    @nopermission('create-users')
+        disabled
+    @endpermission
+    "
+    >create user</a>
 
     <table class="table table-striped table-inverse table-responsive py-4 table-hover">
         <tfoot>
@@ -44,7 +51,12 @@
                             @csrf   
                             <button 
                             type="submit" 
-                            class="close text-danger" 
+                            @haspermission('deleting-users')
+                                class="close text-danger"
+                            @elsepermission
+                                class="close text-secondary"
+                                disabled
+                            @endpermission
                             aria-label="Close"
                             onclick="return confirm('are you sure?')">
                                 <span aria-hidden="true">&times;</span>
@@ -53,7 +65,14 @@
                     </td>
 
                     <td class="bg-light" style="border-top: 0px;" data-toggle="tooltip" data-placement="top" title="edit user">
-                        <a class="close edit text-primary" 
+                        <a 
+                        class="close edit 
+                        @haspermission('edit-users')
+                            text-primary
+                        @elsepermission 
+                            text-secondary disabled 
+                        @endpermission
+                        " 
                         href="{{route('users.edit', $user->id) }}" 
                         aria-label="Close">
                             <span aria-hidden="true">&#9998;</span>
@@ -76,7 +95,12 @@
                             @csrf   
                             <button 
                             type="submit" 
-                            class="btn btn-primary btn-sm"
+                            @haspermission('banning-users')
+                                class="btn btn-primary btn-sm"
+                            @elsepermission
+                                class="btn btn-secondary btn-sm"
+                                disabled
+                            @endpermission
                             >
                             @if($user->is_banned)
                                 unban
