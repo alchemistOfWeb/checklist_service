@@ -76,7 +76,7 @@ class RoleController extends Controller
         
         $admin = Auth::guard('admin')->user();
 
-        if (!$admin->hasPermissionTo('edit-roles') ) {
+        if (!$admin->hasPermissionTo('edit-roles')) {
             abort(403, "You don't have permission to edit roles");
         }
 
@@ -103,6 +103,12 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->hasPermissionTo('edit-roles')) {
+            abort(403, "You don't have permission to edit roles");
+        }
+        
         $request->validate([
             'name' => 'required|string|between:3,255',
             'permissions' =>'array',

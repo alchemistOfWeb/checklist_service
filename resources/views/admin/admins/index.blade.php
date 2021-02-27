@@ -17,7 +17,8 @@
         <tfoot>
             <tr>
                 <td colspan="4">
-                    @include('includes.pagination', ['paginator' => $admins])
+                    {{-- @include('includes.pagination', ['paginator' => $admins]) --}}
+                    {{$admins->links()}}
                 </td>
             </tr>
         </tfoot>
@@ -34,11 +35,13 @@
         <tbody>
             @foreach ($admins as $admin)
                 <tr>
-                    <td scope="row">{{$loop->iteration}}</td>
+                    <td scope="row">
+                        {{$loop->iteration + (($admins->currentPage() - 1) * $admins->perPage())}}
+                    </td>
                     <td>{{$admin->name}}</td>
                     <td>{{$admin->email}}</td>
                     <td>
-                        {{$admin->roles->implode('name', ',')}}
+                        {{$admin->roles->implode('name', ', ')}}
                     </td>
                     <td class="bg-light" style="border-top: 0px;">
                         <form action="{{route('admins.destroy', $admin->id)}}" method="post">

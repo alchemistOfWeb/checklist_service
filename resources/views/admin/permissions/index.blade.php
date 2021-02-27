@@ -36,7 +36,8 @@
         <tfoot>
             <tr>
                 <td colspan="4">
-                    @include('includes.pagination', ['paginator' => $permissions])
+                    {{-- @include('includes.pagination', ['paginator' => $permissions]) --}}
+                    {{$permissions->links()}}
                 </td>
             </tr>
         </tfoot>

@@ -100,34 +100,36 @@ class UserController extends Controller
         $admin = Auth::guard('admin')->user();
         $user = User::find($id);
 
-        if (!$admin->hasPermissionTo('edit-users') 
-            && 
-            ($request->name != $user->name || $request->email != $user->email)) {
+        if (($request->name || $request->email)
+            &&
+            (!$admin->hasPermissionTo('edit-users'))) {
             
             abort(403, "You don't have permission to edit users");
         }
 
-        if (!$admin->hasPermissionTo('limiting-user-checklists') 
-            && 
-            $request->limit_of_checklists != $user->limit_of_checklists) {
+        if ($request->limit_of_checklists
+            &&
+            !$admin->hasPermissionTo('limiting-user-checklists')) {
             
             abort(403, "You don't have permission to limiting user checklists");
         }
 
         $request->validate([
-            'name' => 'required|between:4,64',
+            'name' => ['filled', 'between:4,64'],
             'email' => [
-                'required',
+                'filled',
                 'email',
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
+            'limit-of-checklists' => ['filled']
         ]);
 
         $user->fill($request->all());
-
         
+        if ($request->limit_of_checklists) {
+            $user->limit_of_checklists = $request->limit_of_checklists;
+        }
         
-        $user->limit_of_checklists = $request->limit_of_checklists;
         $user->save();
 
         return redirect()->route('users.index');

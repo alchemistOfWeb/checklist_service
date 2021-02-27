@@ -15,7 +15,6 @@
                     <small>{{$checklist->created_at}}</small>
                 </div>
                 <p class="mb-1">{{$checklist->description}}</p>
-                {{-- <small>paragraph footer</small> --}}
             </a>
             
         @endforeach

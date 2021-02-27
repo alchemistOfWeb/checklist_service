@@ -16,7 +16,8 @@
         <tfoot>
             <tr>
                 <td colspan="5">
-                    @include('includes.pagination', ['paginator' => $users])
+                    {{-- @include('includes.pagination', ['paginator' => $users]) --}}
+                    {{$users->links()}}
                 </td>
             </tr>
         </tfoot>
@@ -33,7 +34,9 @@
 
             @foreach ($users as $user)
                 <tr>
-                    <td scope="row">{{$loop->iteration}}</td>
+                    <td scope="row">
+                        {{$loop->iteration + (($users->currentPage() - 1) * $users->perPage())}}
+                    </td>
                     <td>{{$user->name}}</td>
                     <td>{{$user->email}}</td>
                     <td>{{$user->limit_of_checklists}}</td>
@@ -67,7 +70,7 @@
                     <td class="bg-light" style="border-top: 0px;" data-toggle="tooltip" data-placement="top" title="edit user">
                         <a 
                         class="close edit 
-                        @haspermission('edit-users')
+                        @haspermission('edit-users', 'limiting-user-checklists')
                             text-primary
                         @elsepermission 
                             text-secondary disabled 
