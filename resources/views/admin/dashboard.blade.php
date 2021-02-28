@@ -5,8 +5,50 @@
     <hr>
     <div class="container-fluid border rounded bg-info text-light py-3">
         <h4>Welcom to admin-panel!</h4>
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempora quisquam repudiandae exercitationem. Ad, qui. Beatae adipisci itaque nostrum deserunt sint, ullam temporibus nihil eveniet fuga dicta labore minima, molestiae alias.</p>
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempora quisquam repudiandae exercitationem. Ad, qui. Beatae adipisci itaque nostrum deserunt sint, ullam temporibus nihil eveniet fuga dicta labore minima, molestiae alias.</p>
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempora quisquam repudiandae exercitationem. Ad, qui. Beatae adipisci itaque nostrum deserunt sint, ullam temporibus nihil eveniet fuga dicta labore minima, molestiae alias.</p>
+        
+        <h5>instructions</h5>
+
+        <p>There are was implemented the following abilities:</p>
+
+        <hr>
+        <p>Перейдя на страницу admins и имея необходимые разрешения вы можете сделать следующие:</p>
+        <ul>
+            <li>
+                удалить любого админа
+            </li>
+            <li>
+                создать админа прикрепив к нему роли
+            </li>
+            <li>
+                перейдя на страницу редакирования: добавить/удалить роли, поменять имя, email
+            </li>
+        </ul>
+
+        <hr>
+        <p>Перейдя на страницу users и имея необходимые разрешения вы можете сделать следующие:</p>
+        <ul>
+            <li>
+                нажав на checklists перейдёте к просмотру чеклистов
+            </li>
+            <li>
+                создать юзера (да будет юзер)
+            </li>
+            <li>
+                уничтожить юзера
+            </li>
+            <li>
+                забананить юзера
+            </li>
+            <li>
+                перейдя на страницу редакирования: поменять ограничение по колличеству чеклистов, поменять имя, email
+            </li>
+        </ul>
+
+        <hr>
+        <p>Перейдя на страницу roles и имея необходимые разрешения можно насоздавать новых ролей или отредактировать старые(убрать или добавить в них разрешения):</p>
+
+        <hr>
+        <p>Перейдя на страницу permissions можно просмотреть доступные разрешения</p>
+        
     </div>
 @endsection 

@@ -48,6 +48,9 @@
                             @method('delete')
                             @csrf
                             <button 
+                            data-toggle="tooltip" 
+                            data-placement="top" 
+                            title="delete admin"
                             type="submit" 
                             @haspermission('deleting-users')
                                 class="close text-danger"
@@ -63,6 +66,9 @@
                     </td>
                     <td class="bg-light" style="border-top: 0px;">
                         <a 
+                        data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="edit admin"
                         class="close edit 
                         @haspermission('edit-admins')
                             text-primary

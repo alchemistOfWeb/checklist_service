@@ -3,7 +3,7 @@
 @section('body')
     
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="{{route('dashboard.index')}}">Admin panel </a>
+        <a class="navbar-brand" href="{{route('dashboard.index')}}" data-toggle="tooltip" data-placement="right" title="to the dashboard page">Admin panel </a>
         <button
             class="navbar-toggler"
             type="button"
@@ -91,6 +91,8 @@
                 $('.nav-link-collapse').not(this).removeClass('nav-link-show');
                 $(this).toggleClass('nav-link-show');
             });
+
+            $('[data-toggle="tooltip"]').tooltip()
         });
     </script>
 @endsection

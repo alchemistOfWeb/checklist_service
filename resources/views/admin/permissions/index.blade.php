@@ -91,6 +91,9 @@
                     </td>
                     <td class="bg-light" style="border-top: 0px;">
                         <a 
+                        data-toggle="tooltip" 
+                        data-placement="right" 
+                        title="change the name"
                         aria-label="Close"
                         @haspermission('edit-permissions')
                             class="close edit text-primary" 
