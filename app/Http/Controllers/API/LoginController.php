@@ -51,6 +51,10 @@ class LoginController extends Controller
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['error' => 'The provided credentials are incorrect.'], 401);
         }
+
+        if ($user->status == User::IS_BANNED) {
+            return response()->json('', 423);
+        }
      
         $token = $user->createToken($request->device_name)->plainTextToken;
 

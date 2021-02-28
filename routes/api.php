@@ -31,7 +31,7 @@ Route::post('register', [LoginController::class, 'register'])
     ->name('register');
 
 
-Route::group(['name' => 'api.', 'middleware' => 'auth:sanctum'], function(){
+Route::group(['name' => 'api.', 'middleware' => ['auth:sanctum', 'isbanned']], function(){
     
     // Route::apiResource('users', UserController::class);
     // Route::apiResource('users/{uid}/checklists', ChecklistController::class);

@@ -14,8 +14,6 @@ class Checklist extends Model
     const TASK_IS_DONE = 1;
     const TASK_ISNT_DONE = 0;
 
-    protected $table = "checklists";
-
     protected $fillable = ['title', 'description'];
 
     protected $casts = [
@@ -37,11 +35,7 @@ class Checklist extends Model
      * @return Checklist
      */
     public static function create($fields)
-    {
-        // if ($user->num_of_checklists >= $user->limit_of_checklists) {
-        //     abort(403, 'limit is exceeded');
-        // }
-        
+    {        
         $user = auth()->user();
         $user->increment('num_of_checklists');
         $user->save();
@@ -63,8 +57,6 @@ class Checklist extends Model
 
         $checklist->user_id = $user->id;
         $checklist->save();
-
-        
         
         return $checklist;
     }
@@ -103,7 +95,6 @@ class Checklist extends Model
             'title' => $task['title'],
             'is_done' => 0,
         ];
-        // $this->task_increment++;
 
         $this->options = $tasks;
         $this->save();
@@ -174,7 +165,5 @@ class Checklist extends Model
         $user = $this->user;
         $user->num_of_checklists -= 1;
         $user->save();
-
     }
-
 }

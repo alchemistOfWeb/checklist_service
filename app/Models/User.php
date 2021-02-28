@@ -56,7 +56,7 @@ class User extends Authenticatable
      */
     public function bun()
     {
-        // $this->is_banned = true;
+        // $this->tokens()->delete();
         $this->status = self::IS_BANNED;
         $this->save();
     }
@@ -66,7 +66,6 @@ class User extends Authenticatable
      */
     public function unbun()
     {
-        // $this->is_banned = false;
         $this->status = self::IS_ACTIVE;
         $this->save();
     }
