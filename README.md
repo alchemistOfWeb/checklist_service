@@ -36,15 +36,23 @@ PHP с использованием фреймворка (Yii2 или Laravel)
 
 ## Установка
 linux:
+
     ctrl+alt+tab
+
 win:
+
     win+r 
+
     cmd
 
 дальше одинаково:
+
     cd нужный каталог
+
     git clone https://github.com/alchemistOfWeb/checklist_service.git
+
     cd checklist_service
+
     composer update
     
 далее копируем файл .env.example и переименовываем в просто .env 
@@ -89,7 +97,7 @@ DB_PASSWORD=
 
 - Просмотр чек листов.
     - get: http://checklist_service/admin/users/{uid}/checklists 
-        -Все чеклисты конкретного пользователя
+         -Все чеклисты конкретного пользователя
     
 )
 
@@ -138,14 +146,12 @@ DB_PASSWORD=
 - Регистрация / Авторизация;
     можно получить досуп след запросами:
     - post: http://checklist_service/login
-
     json: `{
         "email":"useremail"
         "password":"userpassword"
     }`
 
     - post: http://checklist_service/register
-
     json: `{
         "email":"useremail",
         "name":"username",
@@ -154,7 +160,6 @@ DB_PASSWORD=
 
 - Создать/Удалить чек лист (учитывать настройки возможного кол-ва);
     - post: http://checklist_service/api/users/{uid}/checklists
-
     json: `{
         "title":"sometitle",
         "description":"some description",
@@ -164,7 +169,6 @@ DB_PASSWORD=
 
 - Добавить/Удалить пункт в чек лист;
     - post: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks
-
     json: `{
         "text":"What we need to do",
     }`
