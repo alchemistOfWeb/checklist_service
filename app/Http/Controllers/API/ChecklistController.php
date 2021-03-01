@@ -78,11 +78,11 @@ class ChecklistController extends Controller
      */
     public function createChecklist($uid, Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request, [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['string', 'max:500'],
             // 'options' => ['array'],
-        ]);    
+        ]);
         
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);

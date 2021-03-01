@@ -57,12 +57,18 @@ win:
     
 далее копируем файл .env.example и переименовываем в просто .env 
 заполняем нужные поля: 
+
 DB_DATABASE=
+
 DB_USERNAME=
+
 DB_PASSWORD=
 
+
 дальше, если хотите получить тестовые данные, используйте следующие команды(информация о доступах указана именно для тестовых пользователей):
+
     php artisan migrate 
+    
     php artisan db:seed
 
 ## Информация о доступах: 
@@ -75,8 +81,9 @@ DB_PASSWORD=
     - password:       root
 
 ## admin panel
-Пункты чеклиста (tasks) были реализованы в виде json-поля. 
-Не рассуждал и не тестил особо, но решил что такой вариант будет удобнее и быстрее
+Пункты чеклиста (tasks) были реализованы в виде json-поля "options". 
+В ходе рассуждений решил что такой вариант будет удобнее и быстрее.
+Так как в большинстве случав в данном проекте всё-равно приходится отправлять запрос на поиск чеклиста при выборке его пунктов, чтобы убедится в его существовании. Хотя, возможно, это излишне и достаточно будет сделать отдельную таблицу, что легче и быстрее. 
 
 были реализованы все пункты из тз (
 - Управление пользователями с возможностью блокировки;
@@ -146,31 +153,47 @@ DB_PASSWORD=
 - Регистрация / Авторизация;
     можно получить досуп след запросами:
     - post: http://checklist_service/login
+
     json: `{
+
         "email":"useremail"
+
         "password":"userpassword"
+
     }`
 
     - post: http://checklist_service/register
+
     json: `{
+
         "email":"useremail",
+
         "name":"username",
+
         "password":"userpassword",
+
     }`
 
 - Создать/Удалить чек лист (учитывать настройки возможного кол-ва);
     - post: http://checklist_service/api/users/{uid}/checklists
+
     json: `{
+
         "title":"sometitle",
+
         "description":"some description",
+
     }`
 
     - delete: http://checklist_service/api/users/{uid}/checklists/{cid}
 
 - Добавить/Удалить пункт в чек лист;
     - post: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks
+
     json: `{
+
         "text":"What we need to do",
+
     }`
 
     - delete: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks/{tid}
