@@ -1,11 +1,12 @@
 
 # Checklist_service
-## author: Nikita Kuznetsov 
-Тестовое задание
+### author: Nikita Kuznetsov 
+## Тестовое задание
 
 PHP с использованием фреймворка (Yii2 или Laravel)
+#### Для реализации проекта был выбран Laravel 8
 
-Необходимо реализовать сервис чек листов:
+Основные функции сервиса:
 
 1. Админка:
 
@@ -31,44 +32,180 @@ PHP с использованием фреймворка (Yii2 или Laravel)
 
 - Получить список пунктов чеклиста с указанием выполнен/не выполнен.
 
-# Установка
+
+
+## Установка
 linux:
     ctrl+alt+tab
 win:
     win+r 
     cmd
 
-одинаково:
+дальше одинаково:
     cd нужный каталог
     git clone https://github.com/alchemistOfWeb/checklist_service.git
+    cd checklist_service
+    composer update
+    
+далее копируем файл .env.example и переименовываем в просто .env 
+заполняем нужные поля: 
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
 
-если хотите получить тестовые данные(информация о доступах указана именно для тестовых пользователей)
+дальше, если хотите получить тестовые данные, используйте следующие команды(информация о доступах указана именно для тестовых пользователей):
     php artisan migrate 
     php artisan db:seed
 
+## Информация о доступах: 
+- admin panel:
+    - email:          super@supermail.com
+    - password:       root
 
-# Информация о доступах: 
-admin panel:
-- email:          super@supermail.com
-- password:       root
+- api:
+    - email:          user@supermail.com
+    - password:       root
 
-api:
-- email:          user@supermail.com
-- password:       root
-
-# admin panel
+## admin panel
 Пункты чеклиста (tasks) были реализованы в виде json-поля. 
-В ходе рассжудений (но не тестов) пришёл к выводу, что пункты по сути являются самим чеклистом, а чек лист - всего лишь название => часто придётся получать чек лист целиком со всеми его данными, а храня пункты в отдельной таблице на достаточно большом объёме данных замедляется процесс поиска и выборки => мне показалось неплохой идеей сделать то что было сделано
+Не рассуждал и не тестил особо, но решил что такой вариант будет удобнее и быстрее
 
-было реализованы все пункты из тз (
-    -блокировка юзеров, 
-    -управление админами, 
-    -просмотр чеклистов, 
-    -огранничение колличества чеклистов у юзера
+были реализованы все пункты из тз (
+- Управление пользователями с возможностью блокировки;
+    - get: http://checklist_service/admin/users   
+        -Обзор всех юзеров с возможностью забанить/разбанить, удалить, перейти на страницу редактирования
+    
+    - get: http://checklist_service/admin/users/create
+
+- Управление админами с разграничением прав; 
+    - get: http://checklist_service/api/admins              -Обзор всех админов с их ролями
+    - get: http://checklist_service/api/admins/create       -Создание нового админа
+    - get: http://checklist_service/api/admins/{aid}/edit   
+        -Здесь можно изменять роли тем самым предоставляя или ограничивая доступ к определённым ресурсам (посмотреть права ролей можно в разделе "roles")
+    
+- Управление кол-вом возможных чек-листов у пользователя (в зависимости от роли админа, необходимо ограничивать данный функционал);
+    - get: http://checklist_service/admin/users/{uid}/edit  
+         -Редактирование юзера с возможностью ограничить макс кол-во чеклистов, если у вас есть роль с соответствующими правами. (по умолчанию limiting-user-checklists есть у ролей "super-admin" и "moderator")
+
+- Просмотр чек листов.
+    - get: http://checklist_service/admin/users/{uid}/checklists 
+        -Все чеклисты конкретного пользователя
+    
 )
 
-# rest api
-При успешной авторизации или регистрации в ответе клиенту будет отправлен специальный токен сгенерированный sanctum. Отправляя его в заголовке (authoriation: bearer {token})
+вот все возможные запросы для admin-panel:
+- USERS:
+    - get: http://checklist_service/admin/users
+    - get: http://checklist_service/admin/users/{uid}/edit
+    - get: http://checklist_service/admin/users/create
+    - put/patch: http://checklist_service/admin/users/{uid}
+    - patch: http://checklist_service/admin/users/{uid}/toggle-status
+    - post: http://checklist_service/admin/users
+    - delete: http://checklist_service/admin/users/{uid}
+
+- CHECKLISTS:
+    - get: http://checklist_service/admin/users/{uid}/checklists
+    - get: http://checklist_service/admin/users/{uid}/checklists/{cid}
+
+- ROLES:
+    - get: http://checklist_service/admin/roles
+    - get: http://checklist_service/admin/roles/{rid}/edit
+    - get: http://checklist_service/admin/roles/create
+    - delete: http://checklist_service/admin/roles/{rid}
+
+- PERMISSIONS:
+    - get: http://checklist_service/admin/users/{uid}/checklists
+    - get: http://checklist_service/admin/users/{uid}/checklists/{cid}
+
+- ADMINS:
+    - get: http://checklist_service/admin/admins
+    - get: http://checklist_service/admin/admins/create
+    - get: http://checklist_service/admin/admins/{aid}/edit
+    - put/patch: http://checklist_service/admin/admins/{aid}/edit
+    - post: http://checklist_service/admin/admins
+    - delete: http://checklist_service/admin/admins/{aid}
+
+- LOGIN/REG:
+    - get: http://checklist_service/admin/login
+    - get: http://checklist_service/admin/logout
+    - post: http://checklist_service/admin/login
+
+
+## rest api
+При успешной авторизации или регистрации в ответе клиенту будет отправлен специальный токен сгенерированный sanctum. Отправляя его в заголовке (authoriation: bearer {token}) можно получать доступ к ресурсам за исключением тех случаев, когда вас забанили или токен был удалён из базы данных
+
+были реализованы и протестированы все методы из тз (
+- Регистрация / Авторизация;
+    можно получить досуп след запросами:
+    - post: http://checklist_service/login
+
+    json: `{
+        "email":"useremail"
+        "password":"userpassword"
+    }`
+
+    - post: http://checklist_service/register
+
+    json: `{
+        "email":"useremail",
+        "name":"username",
+        "password":"userpassword",
+    }`
+
+- Создать/Удалить чек лист (учитывать настройки возможного кол-ва);
+    - post: http://checklist_service/api/users/{uid}/checklists
+
+    json: `{
+        "title":"sometitle",
+        "description":"some description",
+    }`
+
+    - delete: http://checklist_service/api/users/{uid}/checklists/{cid}
+
+- Добавить/Удалить пункт в чек лист;
+    - post: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks
+
+    json: `{
+        "text":"What we need to do",
+    }`
+
+    - delete: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks/{tid}
+
+- Отметить выполнен/не выполнен пункт;
+    - put/patch: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks/{tid}/toggle
+
+- Получить список чек листов;
+    - get: http://checklist_service/api/users/{uid}/checklists
+
+- Получить список пунктов чеклиста с указанием выполнен/не выполнен.
+    - get: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks
+
+)
+
+
+вот все возможные url для api:
+
+- post: http://checklist_service/login
+- post: http://checklist_service/register
+
+- get: http://checklist_service/api/users/{uid}/checklists
+- get: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks
+
+- put/patch: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks/{tid}/toggle
+- post: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks
+- delete: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks/{tid}
+
+- post: http://checklist_service/api/users/{uid}/checklists
+- delete: http://checklist_service/api/users/{uid}/checklists/{cid}
+
+
+
+
+
+
+
+
+
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 

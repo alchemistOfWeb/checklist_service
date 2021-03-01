@@ -105,7 +105,7 @@
                                 disabled
                             @endpermission
                             >
-                            @if($user->is_banned)
+                            @if($user->isBanned())
                                 unban
                             @else
                                 ban

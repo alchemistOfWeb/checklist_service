@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Checklist;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -54,7 +55,7 @@ class ChecklistController extends Controller
      */
     public function createTask($uid, $cid, Request $request)
     {
-        Checklist::find($cid)->createTask($request->all());
+        Checklist::find($cid)->createTask($request->only('text'));
         return response()->json('', 201);
     }
 
@@ -80,7 +81,7 @@ class ChecklistController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['string', 'max:500'],
-            'options' => ['array'],
+            // 'options' => ['array'],
         ]);    
         
         if ($validator->fails()) {
@@ -93,10 +94,8 @@ class ChecklistController extends Controller
             return response()->json(['error' => "limit of checklists is exceeded"], 403);
         }
 
-        $checklist = Checklist::create($request->only('title', 'description', 'options'));
-
-        // $checklist = $user->checklists->create($request->only('title', 'description', 'options'));
-        // $checklist = $user->increment('num_of_checklists');
+        $checklist = Checklist::create($request->only('title', 'description'));
+        // $checklist = Checklist::create($request->only('title', 'description', 'options'));
         
         return response()->json($checklist, 201);
     }

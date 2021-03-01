@@ -12,8 +12,7 @@ class LoginController extends Controller
 {
     public function register(Request $request)
     { 
-
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request, [
             'name' => ['required', 'string', 'max:255',],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
@@ -28,7 +27,7 @@ class LoginController extends Controller
 
         $user = User::create($input);
         
-        $token = $user->createToken($request->device_name)->plainTextToken;
+        $token = $user->createToken("my-app-token")->plainTextToken;
         
         return response()->json(['token' => $token], 200);
     }
@@ -36,7 +35,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request, [
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'between:4,255'],
             'device_name' => ['required', 'string'],
@@ -49,14 +48,14 @@ class LoginController extends Controller
         $user = User::where('email', $request->email)->first();
         
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['error' => 'The provided credentials are incorrect.'], 401);
+            return response()->json(['error' => "The provided credentials are incorrect."], 401);
         }
 
         if ($user->status == User::IS_BANNED) {
-            return response()->json('', 423);
+            return response()->json("You're a banana", 403);
         }
      
-        $token = $user->createToken($request->device_name)->plainTextToken;
+        $token = $user->createToken("my-app-token")->plainTextToken;
 
         return response()->json([
             'token' => $token,

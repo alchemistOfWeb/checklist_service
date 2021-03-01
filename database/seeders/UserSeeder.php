@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
         }
         
         $user = new User;
-        $user->name = 'Lol lol';
+        $user->name = 'Roger Zelazny';
         $user->email = 'user@supermail.com';
         $user->email_verified_at = now();
         $user->password = Hash::make('root');
