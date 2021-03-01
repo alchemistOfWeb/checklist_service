@@ -17,11 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
 // login user
 Route::post('login', [LoginController::class, 'login'])
     ->name('login');
@@ -33,45 +28,32 @@ Route::post('register', [LoginController::class, 'register'])
 
 Route::group(['name' => 'api.', 'middleware' => ['auth:sanctum', 'isbanned']], function(){
     
-    // Route::apiResource('users', UserController::class);
-    // Route::apiResource('users/{uid}/checklists', ChecklistController::class);
-
     // get checklist list
-    Route::get('users/{uid}/checklists', [ChecklistController::class, 'getChecklists'])
-        ->name('checklists.getChecklists');
-
-    // get task list
-    Route::get('users/{uid}/checklists/{cid}/tasks', [ChecklistController::class, 'getTasks'])
-        ->name('checklists.getTasks');
-
-    // toggle task of checklist
-    Route::match(['put', 'patch'], 'users/{uid}/checklists/{cid}/tasks/{tid}/toggle', [ChecklistController::class, 'toggleTask'])
-        ->name('checklists.toggleTask');
-
-    // create task in checklist
-    Route::post('users/{uid}/checklists/{cid}/tasks', [ChecklistController::class, 'createTask'])
-        ->name('checklists.createTask');
-
-    // delete task of checklist
-    Route::delete('users/{uid}/checklists/{cid}/tasks/{tid}', [ChecklistController::class, 'destroyTask'])
-        ->name('checklists.destroyTask');
+    Route::get('users/{uid}/checklists', [ChecklistController::class, 'index'])
+        ->name('checklists.index');
 
     // create checklist
-    Route::post('users/{uid}/checklists', [ChecklistController::class, 'createChecklist'])
+    Route::post('users/{uid}/checklists', [ChecklistController::class, 'create'])
         ->name('checklists.createChecklist');
 
     // delete checklist
-    Route::delete('users/{uid}/checklists/{cid}', [ChecklistController::class, 'destroyChecklist'])
+    Route::delete('users/{uid}/checklists/{cid}', [ChecklistController::class, 'destroy'])
         ->name('checklists.destroyChecklist');
+
+    // get task list
+    Route::get('users/{uid}/checklists/{cid}/tasks', [TaskController::class, 'index'])
+        ->name('tasks.index');
+
+    // toggle task of checklist
+    Route::match(['put', 'patch'], 'users/{uid}/checklists/{cid}/tasks/{tid}/toggle', [TaskController::class, 'toggleStatus'])
+        ->name('tasks.toggleStatus');
+
+    // create task in checklist
+    Route::post('users/{uid}/checklists/{cid}/tasks', [TaskController::class, 'create'])
+        ->name('tasks.create');
+
+    // delete task of checklist
+    Route::delete('users/{uid}/checklists/{cid}/tasks/{tid}', [TaskController::class, 'destroy'])
+        ->name('checklists.destroyTask');
         
 });
-
-
-
-// For example
-// Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function(){
-//     // Some routes ...
-//    Route::get('signup', [,''])->name('signup');
-//    Route::post('signup', [DashboardController::class, 'index'])->name('signup');
-//
-// });

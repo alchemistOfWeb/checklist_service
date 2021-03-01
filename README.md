@@ -71,6 +71,8 @@ DB_PASSWORD=
     
     php artisan db:seed
 
+также по умолчанию в корне проекта настроен файл .htaccess, который автоматичеки перенаправляет все запросы с корня в public, что исключает необходимость в использовании команды `php artisan serve`
+
 ## Информация о доступах: 
 - admin panel:
     - email:          super@supermail.com

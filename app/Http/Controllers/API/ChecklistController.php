@@ -16,7 +16,7 @@ class ChecklistController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getChecklists($uid)
+    public function index($uid)
     {
         return 
             response()->json(
@@ -27,56 +27,12 @@ class ChecklistController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getTasks($uid, $cid)
-    {
-        $checklist = Checklist::find($cid);
-        return response()->json($checklist->options, 200);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function toggleTask($uid, $cid, $tid)
-    {
-        Checklist::find($cid)->toggleTask($tid);
-        return response()->json('', 200);   
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createTask($uid, $cid, Request $request)
-    {
-        Checklist::find($cid)->createTask($request->only('text'));
-        return response()->json('', 201);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroyTask($uid, $cid, $tid)
-    {
-        Checklist::find($cid)->deleteTask($tid);
-        return response()->json('', 204);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function createChecklist($uid, Request $request)
+    public function create($uid, Request $request)
     {
         $validator = Validator::make($request, [
             'title' => ['required', 'string', 'max:255'],
@@ -106,7 +62,7 @@ class ChecklistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroyChecklist($uid, $cid)
+    public function destroy($uid, $cid)
     {
         Checklist::find($cid)->remove();
         return response()->json('', 204);

@@ -29,5 +29,15 @@ class Task extends Model
     {
         return $this->status == static::IS_DONE;
     }
+
+    public function toggleStatus()
+    {
+        if ($this->status == static::IS_DONE) {
+            $this->status = static::ISNT_DONE;
+        } else {
+            $this->status = static::IS_DONE;
+        }
+    }
+    
     
 }
