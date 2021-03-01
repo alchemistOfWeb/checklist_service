@@ -31,11 +31,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        $current_admin = Auth::guard('admin')->user();
-
-        if (!$current_admin->hasPermissionTo('create-admins') ) {
-            abort(403, "You don't have permission to create admins");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'create', Admin::class);
 
         $roles = Role::all();
         
@@ -52,11 +48,7 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        $current_admin = Auth::guard('admin')->user();
-
-        if (!$current_admin->hasPermissionTo('create-admins') ) {
-            abort(403, "You don't have permission to create admins");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'create', Admin::class);
 
         $request->validate([
             'roles' =>'array',
@@ -80,6 +72,7 @@ class AdminController extends Controller
     public function show($id)
     {
         $admin = Admin::find($id);
+
         return view('admin.admins.show', ['admin' => $admin]);
     }
 
@@ -91,11 +84,7 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        $current_admin = Auth::guard('admin')->user();
-
-        if (!$current_admin->hasPermissionTo('edit-admins') ) {
-            abort(403, "You don't have permission to edit admins");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'edit', Admin::class);
 
         $admin = Admin::find($id);
 
@@ -121,18 +110,18 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $current_admin = Auth::guard('admin')->user();
-
-        if (!$current_admin->hasPermissionTo('edit-admins') ) {
-            abort(403, "You don't have permission to edit admins");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'edit', Admin::class);
 
         $admin = Admin::find($id);
 
         $request->validate([
             'roles' =>'array',
             'roles.*' =>'exists:roles,id',
-            'name' => 'required|between:4,64',
+            'name' => [
+                'filled', 
+                'required', 
+                'between:4,64',
+            ],
             'email' => [
                 'required',
                 'email',
@@ -153,13 +142,10 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        $current_admin = Auth::guard('admin')->user();
-
-        if (!$current_admin->hasPermissionTo('deleting-admins') ) {
-            abort(403, "You don't have permission to deleting admins");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'delete', Admin::class);
 
         Admin::find($id)->delete();
+
         return redirect()->route('admins.index');
     }
 }

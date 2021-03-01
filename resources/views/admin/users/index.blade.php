@@ -54,7 +54,7 @@
                             @csrf   
                             <button 
                             type="submit" 
-                            @haspermission('deleting-users')
+                            @haspermission('delete-users')
                                 class="close text-danger"
                             @elsepermission
                                 class="close text-secondary"
@@ -98,7 +98,7 @@
                             @csrf   
                             <button 
                             type="submit" 
-                            @haspermission('banning-users')
+                            @haspermission('ban-users')
                                 class="btn btn-primary btn-sm"
                             @elsepermission
                                 class="btn btn-secondary btn-sm"

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Checklist;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -35,7 +36,8 @@ class TaskController extends Controller
     public function toggleStatus($uid, $cid, $tid)
     {
         // Checklist::find($cid)->toggleTask($tid);
-        Checklist::find($cid)->tasks()->toggleStatus($tid);
+
+        Task::find($tid)->toggleStatus();
         return response()->json('', 200);   
     }
 
@@ -48,7 +50,10 @@ class TaskController extends Controller
      */
     public function create($uid, $cid, Request $request)
     {
-        Checklist::find($cid)->createTask($request->only('text'));
+        // Checklist::find($cid)->createTask($request->only('text'));
+
+        Task::create($request->text);
+        
         return response()->json('', 201);
     }
 

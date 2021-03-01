@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
+use App\Policies\RolePolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
@@ -29,11 +31,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $admin = Auth::guard('admin')->user();
-
-        if (!$admin->hasPermissionTo('edit-roles') ) {
-            abort(403, "You don't have permission to edit roles");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'manage', Role::class);
 
         $permissions = Permission::all();
 
@@ -48,11 +46,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $admin = Auth::guard('admin')->user();
-
-        if (!$admin->hasPermissionTo('edit-roles') ) {
-            abort(403, "You don't have permission to edit roles");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'manage', Role::class);
 
         $request->validate([
             'name' => 'required|string|between:3,255',
@@ -72,13 +66,7 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        // $permissions = Permission::all();
-        
-        $admin = Auth::guard('admin')->user();
-
-        if (!$admin->hasPermissionTo('edit-roles')) {
-            abort(403, "You don't have permission to edit roles");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'manage', Role::class);
 
         $role = Role::find($id);
 
@@ -103,11 +91,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $admin = Auth::guard('admin')->user();
-
-        if (!$admin->hasPermissionTo('edit-roles')) {
-            abort(403, "You don't have permission to edit roles");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'manage', Role::class);
         
         $request->validate([
             'name' => 'required|string|between:3,255',
@@ -128,13 +112,10 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $admin = Auth::guard('admin')->user();
-
-        if (!$admin->hasPermissionTo('edit-roles') ) {
-            abort(403, "You don't have permission to edit roles");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'manage', Role::class);
         
         Role::find($id)->delete();
+        
         return redirect()->route('roles.index');
     }
 }

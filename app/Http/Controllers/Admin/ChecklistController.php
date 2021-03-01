@@ -17,34 +17,14 @@ class ChecklistController extends Controller
     public function index($user_id)
     {
         $checklists = Checklist::where('user_id', $user_id)->paginate(15);
+
         $user = User::find($user_id);
-        // dd($checklists->count());
+
         return view('admin.checklists.index', [
             'checklists' => $checklists,
             'user_id'    => $user_id,
             'user'       => $user,
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -70,29 +50,6 @@ class ChecklistController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -100,6 +57,8 @@ class ChecklistController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->authorizeForUser(auth('admin')->user(), 'delete', Checklist::class);
+
+        Checklist::find($id)->delete();
     }
 }

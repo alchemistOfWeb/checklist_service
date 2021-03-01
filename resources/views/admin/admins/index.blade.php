@@ -52,7 +52,7 @@
                             data-placement="top" 
                             title="delete admin"
                             type="submit" 
-                            @haspermission('deleting-users')
+                            @haspermission('delete-users')
                                 class="close text-danger"
                             @elsepermission
                                 class="close text-secondary"

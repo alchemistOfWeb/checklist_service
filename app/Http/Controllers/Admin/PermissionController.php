@@ -29,11 +29,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $admin = Auth::guard('admin')->user();
-
-        if (!$admin->hasPermissionTo('edit-permissions') ) {
-            abort(403, "You don't have permission to edit permissions");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'manage', Permission::class);
 
         $request->validate([
             'name' => 'required|string|between:3,255'
@@ -53,11 +49,7 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $admin = Auth::guard('admin')->user();
-
-        if (!$admin->hasPermissionTo('edit-permissions') ) {
-            abort(403, "You don't have permission to edit permissions");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'manage', Permission::class);
 
         $request->validate([
             'name' => 'required|string|between:3,255',
@@ -77,11 +69,7 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        $admin = Auth::guard('admin')->user();
-
-        if (!$admin->hasPermissionTo('edit-permissions') ) {
-            abort(403, "You don't have permission to edit permissions");
-        }
+        $this->authorizeForUser(auth('admin')->user(), 'manage', Permission::class);
 
         Permission::find($id)->delete();
 

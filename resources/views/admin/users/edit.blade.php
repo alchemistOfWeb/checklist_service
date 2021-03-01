@@ -18,7 +18,7 @@
             aria-describedby="limit-of-checklistsHelp" 
             placeholder="Enter limit of checklists"
             value="{{$user->limit_of_checklists}}"
-            @nopermission('limiting-user-checklists')
+            @nopermission('limit-user-checklists')
                 disabled
             @endpermission
             >
