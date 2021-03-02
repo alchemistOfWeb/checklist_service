@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\ChecklistController;
 use App\Http\Controllers\API\LoginController;
+use App\Http\Controllers\API\TaskController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,31 +30,31 @@ Route::post('register', [LoginController::class, 'register'])
 Route::group(['name' => 'api.', 'middleware' => ['auth:sanctum', 'isbanned']], function(){
     
     // get checklist list
-    Route::get('users/{uid}/checklists', [ChecklistController::class, 'index'])
+    Route::get('checklists', [ChecklistController::class, 'index'])
         ->name('checklists.index');
 
     // create checklist
-    Route::post('users/{uid}/checklists', [ChecklistController::class, 'create'])
+    Route::post('checklists', [ChecklistController::class, 'create'])
         ->name('checklists.createChecklist');
 
     // delete checklist
-    Route::delete('users/{uid}/checklists/{cid}', [ChecklistController::class, 'destroy'])
+    Route::delete('checklists/{cid}', [ChecklistController::class, 'destroy'])
         ->name('checklists.destroyChecklist');
 
     // get task list
-    Route::get('users/{uid}/checklists/{cid}/tasks', [TaskController::class, 'index'])
+    Route::get('checklists/{cid}/tasks', [TaskController::class, 'index'])
         ->name('tasks.index');
 
     // toggle task of checklist
-    Route::match(['put', 'patch'], 'users/{uid}/checklists/{cid}/tasks/{tid}/toggle', [TaskController::class, 'toggleStatus'])
+    Route::match(['put', 'patch'], 'checklists/{cid}/tasks/{tid}/toggle', [TaskController::class, 'toggleStatus'])
         ->name('tasks.toggleStatus');
 
     // create task in checklist
-    Route::post('users/{uid}/checklists/{cid}/tasks', [TaskController::class, 'create'])
+    Route::post('checklists/{cid}/tasks', [TaskController::class, 'create'])
         ->name('tasks.create');
 
     // delete task of checklist
-    Route::delete('users/{uid}/checklists/{cid}/tasks/{tid}', [TaskController::class, 'destroy'])
+    Route::delete('checklists/{cid}/tasks/{tid}', [TaskController::class, 'destroy'])
         ->name('checklists.destroyTask');
         
 });

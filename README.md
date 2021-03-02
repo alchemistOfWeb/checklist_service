@@ -82,10 +82,9 @@ DB_PASSWORD=
     - email:          user@supermail.com
     - password:       root
 
+Абсолютно для всех пользователей пароль по умолчанию: root
+
 ## admin panel
-Пункты чеклиста (tasks) были реализованы в виде json-поля "options". 
-В ходе рассуждений решил что такой вариант будет удобнее и быстрее.
-Так как в большинстве случав в данном проекте всё-равно приходится отправлять запрос на поиск чеклиста при выборке его пунктов, чтобы убедится в его существовании. Хотя, возможно, это излишне и достаточно будет сделать отдельную таблицу, что легче и быстрее. 
 
 были реализованы все пункты из тз (
 - Управление пользователями с возможностью блокировки;
@@ -95,9 +94,9 @@ DB_PASSWORD=
     - get: http://checklist_service/admin/users/create
 
 - Управление админами с разграничением прав; 
-    - get: http://checklist_service/api/admins              -Обзор всех админов с их ролями
-    - get: http://checklist_service/api/admins/create       -Создание нового админа
-    - get: http://checklist_service/api/admins/{aid}/edit   
+    - get: http://checklist_service/admin/admins              -Обзор всех админов с их ролями
+    - get: http://checklist_service/admin/admins/create       -Создание нового админа
+    - get: http://checklist_service/admin/admins/{aid}/edit   
         -Здесь можно изменять роли тем самым предоставляя или ограничивая доступ к определённым ресурсам (посмотреть права ролей можно в разделе "roles")
     
 - Управление кол-вом возможных чек-листов у пользователя (в зависимости от роли админа, необходимо ограничивать данный функционал);
@@ -122,7 +121,7 @@ DB_PASSWORD=
 
 - CHECKLISTS:
     - get: http://checklist_service/admin/users/{uid}/checklists
-    - get: http://checklist_service/admin/users/{uid}/checklists/{cid}
+    - get: http://checklist_service/admin/users/{uid}/checklists/{cid}/tasks
 
 - ROLES:
     - get: http://checklist_service/admin/roles
@@ -177,7 +176,7 @@ DB_PASSWORD=
     }`
 
 - Создать/Удалить чек лист (учитывать настройки возможного кол-ва);
-    - post: http://checklist_service/api/users/{uid}/checklists
+    - post: http://checklist_service/api/checklists
 
     json: `{
 
@@ -187,10 +186,10 @@ DB_PASSWORD=
 
     }`
 
-    - delete: http://checklist_service/api/users/{uid}/checklists/{cid}
+    - delete: http://checklist_service/api/checklists/{cid}
 
 - Добавить/Удалить пункт в чек лист;
-    - post: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks
+    - post: http://checklist_service/api/checklists/{cid}/tasks
 
     json: `{
 
@@ -198,16 +197,16 @@ DB_PASSWORD=
 
     }`
 
-    - delete: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks/{tid}
+    - delete: http://checklist_service/api/checklists/{cid}/tasks/{tid}
 
 - Отметить выполнен/не выполнен пункт;
-    - put/patch: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks/{tid}/toggle
+    - put/patch: http://checklist_service/api/checklists/{cid}/tasks/{tid}/toggle
 
 - Получить список чек листов;
-    - get: http://checklist_service/api/users/{uid}/checklists
+    - get: http://checklist_service/api/checklists
 
 - Получить список пунктов чеклиста с указанием выполнен/не выполнен.
-    - get: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks
+    - get: http://checklist_service/api/checklists/{cid}/tasks
 
 )
 
@@ -217,19 +216,22 @@ DB_PASSWORD=
 - post: http://checklist_service/login
 - post: http://checklist_service/register
 
-- get: http://checklist_service/api/users/{uid}/checklists
-- get: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks
+- get: http://checklist_service/api/checklists
+- get: http://checklist_service/api/checklists/{cid}/tasks
 
-- put/patch: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks/{tid}/toggle
-- post: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks
-- delete: http://checklist_service/api/users/{uid}/checklists/{cid}/tasks/{tid}
+- put/patch: http://checklist_service/api/checklists/{cid}/tasks/{tid}/toggle
+- post: http://checklist_service/api/checklists/{cid}/tasks
+- delete: http://checklist_service/api/checklists/{cid}/tasks/{tid}
 
-- post: http://checklist_service/api/users/{uid}/checklists
-- delete: http://checklist_service/api/users/{uid}/checklists/{cid}
-
-
+- post: http://checklist_service/api/checklists
+- delete: http://checklist_service/api/checklists/{cid}
 
 
+
+
+#
+#
+#
 
 
 

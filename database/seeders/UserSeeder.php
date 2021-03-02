@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        foreach (range(1, 40) as $value) {
+        foreach (range(1, 20) as $value) {
             $user = User::factory()->create();
 
             $num_of_checklists = rand(1, $user->limit_of_checklists);

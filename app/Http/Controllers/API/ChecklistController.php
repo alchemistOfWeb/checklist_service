@@ -16,14 +16,11 @@ class ChecklistController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($uid)
+    public function index()
     {
-        return 
-            response()->json(
-                Checklist::where('user_id', $uid)
-                    ->get(['id', 'description', 'title']), 
-                200
-            );
+        $checklists = auth()->user()->checklists;
+
+        return response()->json($checklists, 200);
     }
 
     /**
@@ -32,12 +29,11 @@ class ChecklistController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create($uid, Request $request)
+    public function create(Request $request)
     {
-        $validator = Validator::make($request, [
+        $validator = Validator::make($request->all(), [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['string', 'max:500'],
-            // 'options' => ['array'],
         ]);
         
         if ($validator->fails()) {
@@ -51,7 +47,6 @@ class ChecklistController extends Controller
         }
 
         $checklist = Checklist::create($request->only('title', 'description'));
-        // $checklist = Checklist::create($request->only('title', 'description', 'options'));
         
         return response()->json($checklist, 201);
     }
@@ -62,9 +57,14 @@ class ChecklistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($uid, $cid)
+    public function destroy($cid)
     {
-        Checklist::find($cid)->remove();
+        $checklist = Checklist::find($cid);
+
+        $this->authorizeForUser(auth()->user(), 'is-checklist-owner', $checklist);
+
+        $checklist->remove();
+
         return response()->json('', 204);
     }
 }

@@ -40,20 +40,17 @@ class Checklist extends Model
     public static function create($fields)
     {        
         $user = auth()->user();
-        // $user->increment('num_of_checklists');
-        // $user->save();
+        $user->increment('num_of_checklists');
+        $user->save();
 
         $checklist = new static;
         $checklist->fill($fields);
-        
-        // $checklist->options = static->validateOptions($checklist, $fields['options']);
 
         $checklist->user_id = $user->id;
         $checklist->save();
         
         return $checklist;
     }
-
 
     /**
      * Create a new checklist.
@@ -69,14 +66,12 @@ class Checklist extends Model
         $this->save();
     }
 
-    
-
     public function remove() 
     {
         $this->delete();
         
         $user = $this->user;
-        $user->num_of_checklists -= 1;
+        $user->decrement('num_of_checklists');
         $user->save();
     }
 }

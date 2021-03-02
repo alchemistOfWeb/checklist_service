@@ -40,6 +40,8 @@ class Task extends Model
         } else {
             $this->status = static::IS_DONE;
         }
+        
+        $this->save();
     }
     
     
