@@ -17,7 +17,11 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-        Admin::factory(20)->create();
+        $roles = Role::where('slug', '!=', 'super-admin')->get();
+
+        for ($count = 0; $count < 20; $count++) { 
+            Admin::factory()->hasAttached($roles->random())->create();
+        }
 
         $super = Role::where('slug', 'super-admin')->first();
 

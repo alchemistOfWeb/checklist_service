@@ -56,10 +56,6 @@ class Admin extends Authenticatable
         $admin->fill($fields);
         $admin->save();
 
-        foreach ($fields['roles'] as $role_id) {
-            $admin->roles()->attach($role_id);
-        }
-
         return $admin;
     }
 
@@ -75,12 +71,6 @@ class Admin extends Authenticatable
     {
         $this->fill($fields);
         $this->save();
-
-        $this->roles()->detach();
-        
-        foreach ($fields['roles'] as $role_id) {
-            $this->roles()->attach($role_id);
-        }
     }
 
     /**
@@ -101,6 +91,10 @@ class Admin extends Authenticatable
         return $this->belongsToMany(Permission::class, 'admins_permissions');
     }
 
+    /**
+     * @param ...$roles
+     * @return bool
+     */
     public function hasRole( ...$roles)
     {
         foreach ($roles as $role) {
@@ -108,24 +102,35 @@ class Admin extends Authenticatable
                 return true;
             }
         }
+
         return false;
     }
 
+    /**
+     * @param string $permission
+     * @return bool
+     */
     public function hasPermission($permission)
     {
         return (bool) $this->permissions->where('slug', $permission)->count();
     }
 
     /**
-     * @param string $permission_slug
+     * @param string|Permission $permission_slug
      * @return bool
      */
-    public function hasPermissionTo($permission_slug)
+    public function hasPermissionTo($permission)
     {
-        $permission = Permission::where('slug', $permission_slug)->first();
+        if (is_string($permission)) {
+            $permission = Permission::where('slug', $permission)->first();
+        }
+
         return $this->hasPermissionThroughRole($permission) || $this->hasPermission($permission->slug);
     }
 
+    /**
+     * @param Permission $permission
+     */
     public function hasPermissionThroughRole($permission)
     {
         foreach ($permission->roles as $role) {
@@ -135,33 +140,5 @@ class Admin extends Authenticatable
         }
 
         return false;
-    }
-
-    public function getAllPermissions(array $permissions)
-    {
-        return Permission::whereIn('slug', $permissions)->get();
-    }
-
-    public function givePermissionsTo(... $permissions)
-    {
-        $permissions = $this->getAllPermissions($permissions);
-        if ($permissions === true) {
-            return $this;
-        }
-        $this->permissions()->saveMany($permissions);
-        return $this;
-    }
-
-    public function deletePermissions(... $permissions) 
-    {
-        $permissions = $this->getAllPermissions($permissions);
-        $this->permissions()->detach($permissions);
-        return $this;
-    }
-
-    public function refreshPermissions(... $permissions)
-    {
-        $this->permissions()->detach();
-        return $this->givePermissionsTo($permissions);
     }
 }

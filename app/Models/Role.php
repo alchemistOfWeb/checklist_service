@@ -31,40 +31,17 @@ class Role extends Model
         }
     }
 
-    public function hasPermissionId($permission_id)
-    {
-
-    }
-
     public function edit($fields)
     {
         $this->name = $fields['name'];
         $this->slug = Str::slug($fields['name'], '-');
         $this->save();
         
-        // What way is more faster?
-
-        // ------FIRST WAY---------------------------------------
-        // I think this way is more faster but I may mistake
         $this->permissions()->detach();
+
         foreach ($fields['permissions'] as $permission_id) {
             $this->permissions()->attach($permission_id);
         }
-        //-------------------------------------------------------
-
-        // ------SECOND WAY--------------------------------------
-        // foreach ($this->permissions as $permission) {
-        //     if (!in_array($permission->id, $fields['permissions'])) {
-        //         $this->permissions()->detach($permission);
-        //     }     
-        // }
-
-        // foreach ($fields['permissions'] as $permission_id) {
-        //     if (!$this->permissions->contains('id', $permission_id)) {
-        //         $this->permissions()->attach($permission_id);
-        //     }
-        // }
-        //--------------------------------------------------------
-
+        
     }
 }

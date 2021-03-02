@@ -22,7 +22,6 @@ use App\Http\Controllers\Admin\UserController;
 |
 */
 
-
 Route::group(['prefix' => 'admin'], function(){
 
     Route::group(['middleware' => 'guest'], function(){

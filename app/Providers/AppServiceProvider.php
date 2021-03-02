@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        
     }
 
     /**
@@ -25,7 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // view()->share('USER_IS_BANNED', User::IS_BANNED);
         Paginator::useBootstrap(); 
     }
 }

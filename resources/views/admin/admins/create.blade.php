@@ -10,25 +10,6 @@
     action="{{route('admins.store')}}"
     method="POST">
         @csrf
-        <div class="form-group">
-            <label class="my-1 mr-2" for="select-roles">Roles:</label>
-            <div class="d-flex flex-wrap" id="role-list">  
-                
-            </div>
-            <select class="custom-select my-1 mr-sm-2" id="select-roles"
-            @nopermission('manage-admin-roles')
-                disabled
-            @endpermission
-            >
-                <option value="0" selected>Choose role for admin...</option>
-                @foreach ($roles as $role)
-                    <option 
-                    value="{{$role->id}}"
-                    >{{$role->name}}</option>
-                    
-                @endforeach
-            </select>
-        </div>
 
         <div class="form-group">
             <label for="admin-email">Email address</label>
@@ -79,13 +60,4 @@
         <button type="submit" class="btn btn-success my-3">Create</button>
     </form>
 
-
-    <script type="text/javascript">
-        $roleList = $('#role-list');
-        $selectRolesElement = $('#select-roles');
-        
-        $selectRolesElement.change(function(){
-            fnAttachOption($(this), $roleList, 'roles');
-        });
-    </script>
 @endsection

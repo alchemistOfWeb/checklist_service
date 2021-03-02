@@ -45,23 +45,29 @@ class AdminPolicy
      * @param  \App\Models\Admin  $admin_model
      * @return mixed
      */
-    public function manageRoles(Admin $admin)
+    public function manageRoles(Admin $admin_current, Admin $admin)
     {
-        return $admin->hasPermissionTo('manage-admin-roles')
+        return 
+            $admin_current->hasPermissionTo('manage-admin-roles') 
+            && 
+            (!$admin->hasRole('super-admin') || $admin_current->hasRole('super-admin'))
             ? Response::allow()
             : Response::deny("You don't have permission to manage roles of admin");
     }
-
+    
     /**
      * Determine whether the admin can delete the model.
      *
-     * @param  \App\Models\User  $admin
-     * @param  \App\Models\Admin  $admin_model
+     * @param  \App\Models\User  $admin_current
+     * @param  \App\Models\Admin  $admin
      * @return mixed
      */
-    public function delete(Admin $admin)
+    public function delete(Admin $admin_current, Admin $admin)
     {
-        return $admin->hasPermissionTo('delete-admins')
+        return 
+            $admin_current->hasPermissionTo('delete-admins') 
+            && 
+            (!$admin->hasRole('super-admin') || $admin_current->id == $admin->id)
             ? Response::allow()
             : Response::deny("You don't have permission to delete admins");
     }

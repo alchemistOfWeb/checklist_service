@@ -2,16 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAdminRequest;
 use App\Models\Admin;
 use App\Models\Role;
+use App\Services\AdminService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
+    protected $adminService;
+
+    public function __construct(AdminService $adminService)
+    {
+        $this->adminService = $adminService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -51,8 +59,6 @@ class AdminController extends Controller
         $this->authorizeForUser(auth('admin')->user(), 'create', Admin::class);
 
         $request->validate([
-            'roles' =>'array',
-            'roles.*' =>'exists:roles,id',
             'name' => 'required|between:4,64',
             'email' => 'required|email|unique:admins,email',
             'password' => 'required|confirmed|string|between:4,255',
@@ -84,6 +90,7 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
+       
         $this->authorizeForUser(auth('admin')->user(), 'edit', Admin::class);
 
         $admin = Admin::find($id);
@@ -110,8 +117,6 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->authorizeForUser(auth('admin')->user(), 'edit', Admin::class);
-
         $admin = Admin::find($id);
 
         $request->validate([
@@ -119,17 +124,26 @@ class AdminController extends Controller
             'roles.*' =>'exists:roles,id',
             'name' => [
                 'filled', 
-                'required', 
                 'between:4,64',
             ],
             'email' => [
-                'required',
+                'filled',
                 'email',
                 Rule::unique('admins', 'email')->ignore($admin->id),
             ],
         ]);
 
-        $admin->edit($request->all());
+        $admin_current = auth('admin')->user();
+
+        $this->authorizeForUser($admin_current, 'edit', $admin);
+
+        if ( isset($request['roles']) ) {
+            $this->authorizeForUser($admin_current, 'manage-roles', $admin);
+
+            $this->adminService->handleUpdatingRoles($request, $admin);
+        }
+        
+        $admin->edit($request->only('name', 'email'));
 
         return redirect()->route('admins.index');
     }
@@ -142,7 +156,7 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorizeForUser(auth('admin')->user(), 'delete', Admin::class);
+        $this->authorizeForUser(auth('admin')->user(), 'delete', Admin::find($id));
 
         Admin::find($id)->delete();
 

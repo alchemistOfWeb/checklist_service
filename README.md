@@ -93,15 +93,15 @@ DB_PASSWORD=
     
     - get: http://checklist_service/admin/users/create
 
-- Управление админами с разграничением прав; 
+- Управление админами с разграничением прав; // По умолчанию доступно только при наличии роли 'Super admin'
     - get: http://checklist_service/admin/admins              -Обзор всех админов с их ролями
     - get: http://checklist_service/admin/admins/create       -Создание нового админа
     - get: http://checklist_service/admin/admins/{aid}/edit   
         -Здесь можно изменять роли тем самым предоставляя или ограничивая доступ к определённым ресурсам (посмотреть права ролей можно в разделе "roles")
     
-- Управление кол-вом возможных чек-листов у пользователя (в зависимости от роли админа, необходимо ограничивать данный функционал);
+- Управление кол-вом возможных чек-листов у пользователя (в зависимости от роли админа, необходимо ограничивать данный функционал); 
     - get: http://checklist_service/admin/users/{uid}/edit  
-         -Редактирование юзера с возможностью ограничить макс кол-во чеклистов, если у вас есть роль с соответствующими правами. (по умолчанию limiting-user-checklists есть у ролей "super-admin" и "moderator")
+         -Редактирование юзера с возможностью ограничить макс кол-во чеклистов, если у вас есть роль с соответствующими правами. (по умолчанию доступно только для ролей "super-admin" и "admin")
 
 - Просмотр чек листов.
     - get: http://checklist_service/admin/users/{uid}/checklists 
@@ -155,47 +155,47 @@ DB_PASSWORD=
     можно получить досуп след запросами:
     - post: http://checklist_service/login
 
-    json: `{
-
-        "email":"useremail"
-
+    json: 
+    `
+    {
+        "email":"useremail",
         "password":"userpassword"
-
-    }`
+    }
+    `
 
     - post: http://checklist_service/register
 
-    json: `{
-
+    json: 
+    `
+    {
         "email":"useremail",
-
         "name":"username",
-
-        "password":"userpassword",
-
-    }`
+        "password":"userpassword"
+    }
+    `
 
 - Создать/Удалить чек лист (учитывать настройки возможного кол-ва);
     - post: http://checklist_service/api/checklists
 
-    json: `{
-
+    json: 
+    `
+    {
         "title":"sometitle",
-
-        "description":"some description",
-
-    }`
+        "description":"some description"
+    }
+    `
 
     - delete: http://checklist_service/api/checklists/{cid}
 
 - Добавить/Удалить пункт в чек лист;
     - post: http://checklist_service/api/checklists/{cid}/tasks
 
-    json: `{
-
-        "text":"What we need to do",
-
-    }`
+    json: 
+    `
+    {
+        "text":"What we need to do"
+    }
+    `
 
     - delete: http://checklist_service/api/checklists/{cid}/tasks/{tid}
 

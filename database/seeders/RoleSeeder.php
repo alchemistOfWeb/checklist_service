@@ -20,20 +20,15 @@ class RoleSeeder extends Seeder
 
         $this->createRole('Super admin')->permissions()->attach($permissions->values());
 
+        // Test roles:
         $this->createRole('Admin')->permissions()->attach([
-            $permissions['create-admins'],
-            $permissions['edit-admins'],
-            $permissions['delete-admins'],
-            $permissions['manage-admin-roles'],
-            $permissions['manage-admin-permissions'],
-            $permissions['ban-users'],
-            $permissions['edit-roles'],
-        ]);
-
-        $this->createRole('Moderator')->permissions()->attach([
             $permissions['ban-users'],
             $permissions['limit-user-checklists'],
             $permissions['edit-users'],
+            $permissions['create-users'],
+            $permissions['delete-users'],
+            $permissions['delete-checklists'],
+            $permissions['manage-admin-roles'],
         ]);
 
         $this->createRole('Developer')->permissions()->attach([
@@ -41,6 +36,7 @@ class RoleSeeder extends Seeder
             $permissions['edit-users'],
             $permissions['delete-users'],
         ]);
+        /////////////////
     }
 
     /**
