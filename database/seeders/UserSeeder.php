@@ -29,9 +29,9 @@ class UserSeeder extends Seeder
             
             $checklists = Checklist::factory()->count($num_of_checklists)->for($user)->create();
 
-            $num_of_tasks = rand(2, 20);
-
+            
             foreach ($checklists as &$checklist) {
+                $num_of_tasks = rand(2, 20);
                 Task::factory()->count($num_of_tasks)->for($checklist)->create();
             }
         }
