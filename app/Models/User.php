@@ -52,38 +52,43 @@ class User extends Authenticatable
     }
 
     /**
-     * bun the user
+     * ban the user
      */
-    public function bun()
+    public function ban()
     {
-        // $this->tokens()->delete();
         $this->status = self::IS_BANNED;
         $this->save();
     }
 
     /**
-     * unbun the user
+     * unban the user
      */
-    public function unbun()
+    public function unban()
     {
         $this->status = self::IS_ACTIVE;
         $this->save();
     }
 
+    /**
+     * unban if user is banned and ban him in other case
+     */
     public function toggleStatus()
     {
         if ($this->status == self::IS_BANNED) {
-            $this->unbun();
+            $this->unban();
         } else {
-            $this->bun();
+            $this->ban();
         }
     }
 
+    /**
+     * @return bool
+     */
     public function isBanned()
     {
-
         return ($this->status == self::IS_BANNED) ? true : false;
     }
+
     /**
      * @param $fields
      * {

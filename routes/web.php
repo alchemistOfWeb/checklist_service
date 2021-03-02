@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Admin\UserController;
 
 /*
@@ -37,9 +38,10 @@ Route::group(['prefix' => 'admin'], function(){
         Route::resource('/users', UserController::class);
         Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus'); // bun or unban user
         Route::resource('/users/{user}/checklists', ChecklistController::class);
+        Route::get('/users/{user}/checklists/{checklist}/index', [TaskController::class, 'index'])->name('tasks.index');
     
         Route::resource('/permissions', PermissionController::class);
-    
+        
         Route::resource('/roles', RoleController::class);
     });
 });

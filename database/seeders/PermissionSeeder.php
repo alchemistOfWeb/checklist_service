@@ -20,15 +20,17 @@ class PermissionSeeder extends Seeder
 
         $this->createPermission('Create users');
         $this->createPermission('Edit users');
-        $this->createPermission('Deleting users');
-        $this->createPermission('Banning users');
-        $this->createPermission('Limiting user checklists');
+        $this->createPermission('Delete users');
+        $this->createPermission('Ban users');
+        $this->createPermission('Limit user checklists');
 
         $this->createPermission('Create admins');
         $this->createPermission('Edit admins');
-        $this->createPermission('Deleting admins');
+        $this->createPermission('Delete admins');
         $this->createPermission('Manage admin roles');
         $this->createPermission('Manage admin permissions');
+
+        $this->createPermission('Delete checklists');
     }
 
     public function createPermission(string $str)

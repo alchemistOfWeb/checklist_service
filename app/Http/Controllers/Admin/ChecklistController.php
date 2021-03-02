@@ -20,6 +20,8 @@ class ChecklistController extends Controller
 
         $user = User::find($user_id);
 
+        $checklists = $user->checklists()->paginate(15);
+
         return view('admin.checklists.index', [
             'checklists' => $checklists,
             'user_id'    => $user_id,
@@ -33,21 +35,21 @@ class ChecklistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($uid, $cid)
-    {
-        $checklist = Checklist::find($cid);
+    // public function show($uid, $cid)
+    // {
+    //     $checklist = Checklist::find($cid);
 
-        if ($checklist->user_id != $uid) {
-            abort(404);
-        } 
+    //     if ($checklist->user_id != $uid) {
+    //         abort(404);
+    //     } 
         
-        return view(
-            'admin.checklists.show', 
-            [
-                'checklist' => $checklist,
-            ]
-        );
-    }
+    //     return view(
+    //         'admin.checklists.show', 
+    //         [
+    //             'checklist' => $checklist,
+    //         ]
+    //     );
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -55,7 +57,7 @@ class ChecklistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($uid, $id)
     {
         $this->authorizeForUser(auth('admin')->user(), 'delete', Checklist::class);
 

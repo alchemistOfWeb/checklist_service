@@ -21,23 +21,23 @@ class ChecklistFactory extends Factory
      */
     public function definition()
     {
-        $options_length = rand(2, 20);
-        $options = range(1, $options_length);
+        // $options_length = rand(2, 20);
+        // $options = range(1, $options_length);
 
-        foreach ($options as $key => &$value) {
-            $value = [
-                'tid' => $key + 1,
-                'title' => $this->faker->paragraph(2),
-                'is_done' => rand(0, 1),
-            ];
-        }
-
+        // foreach ($options as $key => &$value) {
+        //     $value = [
+        //         'tid' => $key + 1,
+        //         'text' => $this->faker->paragraph(2),
+        //         'is_done' => rand(0, 1),
+        //     ];
+            
+        // }
         
         return [
             'title' => $this->faker->sentence(),
             'description' => $this->faker->text(),
-            'options' => $options,
-            'task_increment' => $options_length + 1,
+            // 'options' => $options,
+            // 'task_increment' => $options_length + 1,
         ];
     }
 }

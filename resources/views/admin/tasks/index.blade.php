@@ -7,9 +7,9 @@
                 {{$checklist->description}}
             </p>
         </li>
-        @foreach ($checklist->options as $item)
+        @foreach ($tasks as $item)
             <li class="list-group-item d-flex justify-content-between list-group-item-info">
-                <span>{{$item['title']}}</span>
+                <span>{{$item->text}}</span>
 
                 <div class="form-check">
                     <input 
@@ -17,7 +17,7 @@
                     type="checkbox"  
                     value="" 
                     name="" 
-                    @if($item['is_done'])
+                    @if($item->isDone())
                     checked
                     @endif
                     disabled>
@@ -25,5 +25,6 @@
             </li>
         @endforeach
     </ul>
+    {{$tasks->links()}}
 
 @endsection

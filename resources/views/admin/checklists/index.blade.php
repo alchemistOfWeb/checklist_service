@@ -7,7 +7,7 @@
         @foreach ($checklists as $checklist)
             <a href="
             {{
-            route('checklists.show', ['user' => $user_id, 'checklist' => $checklist->id])
+            route('tasks.index', ['user' => $user_id, 'checklist' => $checklist->id])
             }}" 
             class="list-group-item list-group-item-action flex-column align-items-start border rounded mb-2">
                 <div class="d-flex w-100 justify-content-between">
@@ -20,7 +20,7 @@
         @endforeach
     </div>
 
-    {{-- {{$checklists->links()}} --}}
-    @include('includes.pagination', ['paginator' => $checklists])
+    {{$checklists->links()}}
+    {{-- @include('includes.pagination', ['paginator' => $checklists]) --}}
 
 @endsection

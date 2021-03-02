@@ -18,7 +18,6 @@
         <tfoot>
             <tr>
                 <td colspan="5">
-                    {{-- @include('includes.pagination', ['paginator' => $roles]) --}}
                     {{$roles->links()}}
                 </td>
             </tr>

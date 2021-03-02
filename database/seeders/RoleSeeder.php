@@ -18,69 +18,37 @@ class RoleSeeder extends Seeder
     {
         $permissions = Permission::get()->pluck('id', 'slug');
 
-        // $manageUsers = Permission::where('slug', 'Edit permissions')->first();
-
-        // $f = Permission::where('slug', 'Edit roles')->first();
-
-        // $manageUsers = Permission::where('slug', 'Create users')->first();
-        // $manageUsers = Permission::where('slug', 'Edit users')->first();
-        // $manageUsers = Permission::where('slug', 'Deleting users')->first();
-        // $manageUsers = Permission::where('slug', 'Banning users')->first();
-        // $manageUsers = Permission::where('slug', 'Limiting user checklists')->first();
-
-        // $manageUsers = Permission::where('slug', 'Create admins')->first();
-        // $manageUsers = Permission::where('slug', 'Edit admins')->first();
-        // $manageUsers = Permission::where('slug', 'Deleting admins')->first();
-        // $manageUsers = Permission::where('slug', 'Manage admin roles')->first();
-        // $manageUsers = Permission::where('slug', 'Manage admin permissions')->first();
-
-
-
-        // dd(Str::slug('Laravel 5 Framework', '-'));
         $this->createRole('Super admin')->permissions()->attach($permissions->values());
 
         $this->createRole('Admin')->permissions()->attach([
             $permissions['create-admins'],
             $permissions['edit-admins'],
-            $permissions['deleting-admins'],
+            $permissions['delete-admins'],
             $permissions['manage-admin-roles'],
             $permissions['manage-admin-permissions'],
-            $permissions['banning-users'],
+            $permissions['ban-users'],
             $permissions['edit-roles'],
         ]);
 
         $this->createRole('Moderator')->permissions()->attach([
-            $permissions['banning-users'],
-            $permissions['limiting-user-checklists'],
+            $permissions['ban-users'],
+            $permissions['limit-user-checklists'],
             $permissions['edit-users'],
         ]);
 
         $this->createRole('Developer')->permissions()->attach([
             $permissions['create-users'],
             $permissions['edit-users'],
-            $permissions['deleting-users'],
+            $permissions['delete-users'],
         ]);
-
-
-        // $manager = new Role();
-        // $manager->name = 'Project Manager';
-        // $manager->slug = 'project-manager';
-        // $manager->save();
-        // $manager->permissions()->attach($manageUsers);
-        
-        // $developer = new Role();
-        // $developer->name = 'Web Dev';
-        // $developer->slug = 'web-dev';
-        // $developer->save();
-        
-        // $super = new Role();
-        // $super->name = 'Super';
-        // $super->slug = 'super';
-        // $super->save();
-        // $super->permissions()->attach($manageUsers);
-        // $super->permissions()->attach($setAdminRights);
     }
 
+    /**
+     * help method
+     *
+     * @param string $str
+     * 
+     */
     public function createRole($str)
     {
         $manager = new Role();

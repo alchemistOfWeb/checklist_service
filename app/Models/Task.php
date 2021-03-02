@@ -19,10 +19,13 @@ class Task extends Model
         return $this->belongsTo(Checklist::class);
     }
 
-    static function create($fields)
+    public static function create($fields)
     {
         $task = new static;
         $task->text = $fields['text'];
+        $task->save();
+
+        return $task;
     }
 
     public function isDone()
