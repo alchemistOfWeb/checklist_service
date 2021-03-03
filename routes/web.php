@@ -39,7 +39,7 @@ Route::group(['prefix' => 'admin'], function(){
         Route::resource('/users/{user}/checklists', ChecklistController::class);
         Route::get('/users/{user}/checklists/{checklist}/index', [TaskController::class, 'index'])->name('tasks.index');
     
-        Route::resource('/permissions', PermissionController::class);
+        Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
         
         Route::resource('/roles', RoleController::class);
     });
