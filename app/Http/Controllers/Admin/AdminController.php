@@ -90,8 +90,7 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-       
-        $this->authorizeForUser(auth('admin')->user(), 'edit', Admin::class);
+        $this->authorizeForUser(auth('admin')->user(), 'update', Admin::class);
 
         $admin = Admin::find($id);
 
@@ -135,9 +134,11 @@ class AdminController extends Controller
 
         $admin_current = auth('admin')->user();
 
-        $this->authorizeForUser($admin_current, 'edit', $admin);
+        if ( isset($request['name']) || isset($request['email']) ) {
+            $this->authorizeForUser($admin_current, 'edit', $admin);
+        }
 
-        if ( isset($request['roles']) ) {
+        if ( isset($request['special']) ) {
             $this->authorizeForUser($admin_current, 'manage-roles', $admin);
 
             $this->adminService->handleUpdatingRoles($request, $admin);

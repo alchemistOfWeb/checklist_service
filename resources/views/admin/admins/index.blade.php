@@ -3,7 +3,7 @@
 @section('content')
     <h2>admins</h2>
     <hr>
-    
+    @include('includes.errors')
     <a 
     href="{{route('admins.create')}}" 
     class="btn btn-success border
@@ -70,7 +70,7 @@
                         data-placement="top" 
                         title="edit admin"
                         class="close edit 
-                        @haspermission('edit-admins')
+                        @haspermission('edit-admins', 'manage-admin-roles')
                             text-primary
                         @elsepermission 
                             text-secondary disabled 

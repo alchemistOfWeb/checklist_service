@@ -6,7 +6,7 @@
 
     @include('includes.errors')
 
-    <form class="form-inline" action="{{route('permissions.store')}}" method="post">
+    {{-- <form class="form-inline" action="{{route('permissions.store')}}" method="post">
         @csrf
         <div class="form-group mr-sm-3 mb-2">
             <input 
@@ -30,7 +30,7 @@
         >
             create permission
         </button>
-    </form>
+    </form> --}}
     
     <table class="table table-striped table-inverse table-responsive py-4 table-hover">
         <tfoot>
@@ -71,7 +71,7 @@
                         </div>
                         
                     </td>
-                    <td class="bg-light" style="border-top: 0px;">
+                    {{-- <td class="bg-light" style="border-top: 0px;">
                         <form action="{{route('permissions.destroy', $permission->id)}}" method="post">
                             @method('delete')
                             @csrf
@@ -131,7 +131,7 @@
                             @csrf
                             <button type="submit" class="btn btn-success border">save</button>
                         </form>
-                    </td>
+                    </td> --}}
                 </tr>
             @endforeach
 

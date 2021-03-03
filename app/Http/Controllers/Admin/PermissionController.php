@@ -21,58 +21,58 @@ class PermissionController extends Controller
         return view('admin.permissions.index', ['permissions' => $permissions]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->authorizeForUser(auth('admin')->user(), 'manage', Permission::class);
+    // /**
+    //  * Store a newly created resource in storage.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function store(Request $request)
+    // {
+    //     $this->authorizeForUser(auth('admin')->user(), 'manage', Permission::class);
 
-        $request->validate([
-            'name' => 'required|string|between:3,255'
-        ]);
+    //     $request->validate([
+    //         'name' => 'required|string|between:3,255'
+    //     ]);
         
-        Permission::create($request->all());
+    //     Permission::create($request->all());
 
-        return redirect()->route('permissions.index');
-    }
+    //     return redirect()->route('permissions.index');
+    // }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $this->authorizeForUser(auth('admin')->user(), 'manage', Permission::class);
+    // /**
+    //  * Update the specified resource in storage.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function update(Request $request, $id)
+    // {
+    //     $this->authorizeForUser(auth('admin')->user(), 'manage', Permission::class);
 
-        $request->validate([
-            'name' => 'required|string|between:3,255',
-            'permissions' =>'array',
-        ]);
+    //     $request->validate([
+    //         'name' => 'required|string|between:3,255',
+    //         'permissions' =>'array',
+    //     ]);
 
-        Permission::find($id)->edit($request->all());
+    //     Permission::find($id)->edit($request->all());
 
-        return redirect()->route('permissions.index');
-    }
+    //     return redirect()->route('permissions.index');
+    // }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $this->authorizeForUser(auth('admin')->user(), 'manage', Permission::class);
+    // /**
+    //  * Remove the specified resource from storage.
+    //  *
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function destroy($id)
+    // {
+    //     $this->authorizeForUser(auth('admin')->user(), 'manage', Permission::class);
 
-        Permission::find($id)->delete();
+    //     Permission::find($id)->delete();
 
-        return redirect()->route('permissions.index');
-    }
+    //     return redirect()->route('permissions.index');
+    // }
 }

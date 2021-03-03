@@ -28,8 +28,12 @@ class PermissionServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        Blade::directive('haspermission', function ($permission) {
-            return "<?php if ( Auth::guard('admin')->user()->hasPermissionTo($permission) )  { ?>";
+        Blade::directive('haspermission', function (...$permissions) {
+            $permissions = implode(', ', $permissions);
+
+            return "<?php 
+                if ( Auth::guard('admin')->user()->hasAnyPermission($permissions) )  
+            { ?>";
         });
         
         Blade::directive('nopermission', function ($permission) {
@@ -38,6 +42,10 @@ class PermissionServiceProvider extends ServiceProvider
 
         Blade::directive('elsepermission', function ($permission) {
             return "<?php } else { ?>";
+        });
+
+        Blade::directive('elseifpermission', function ($permission) {
+            return "<?php } elseif ( Auth::guard('admin')->user()->hasPermissionTo($permission) ) { ?>";
         });
 
         Blade::directive('endpermission', function ($permission) {

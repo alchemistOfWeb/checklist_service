@@ -116,13 +116,28 @@ class Admin extends Authenticatable
     }
 
     /**
-     * @param string|Permission $permission_slug
+     * @param array $permission
+     * @return bool
+     */
+    public function hasAnyPermission(...$permissions)
+    {
+        foreach ($permissions as $permission) {
+            if ( $this->hasPermissionTo($permission) ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string|Permission $permission
      * @return bool
      */
     public function hasPermissionTo($permission)
     {
         if (is_string($permission)) {
-            $permission = Permission::where('slug', $permission)->first();
+            $permission = Permission::where('slug', $permission)->firstOrFail();
         }
 
         return $this->hasPermissionThroughRole($permission) || $this->hasPermission($permission->slug);

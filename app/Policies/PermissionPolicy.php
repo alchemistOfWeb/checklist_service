@@ -19,8 +19,9 @@ class PermissionPolicy
      */
     public function manage(Admin $admin)
     {
-        return $admin->hasPermissionTo('edit-permissions')
-            ? Response::allow()
-            : Response::deny("You don't have permission to manage permissions");
+        return Response::deny("This functionality has been limited and any roles or permissions don't help you");
+        // return $admin->hasPermissionTo('edit-permissions')
+        //     ? Response::allow()
+        //     : Response::deny("You don't have permission to manage permissions");
     }
 }

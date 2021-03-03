@@ -10,9 +10,10 @@ class AdminService
     public function handleUpdatingRoles(Request $request, $admin) 
     { 
         $admin_current = auth('admin')->user();
-
-        if ( !$admin_current->hasRole('super-admin') ) {
-            foreach ($request['roles'] as $key => $value) {
+        
+        if ( !$admin_current->hasRole('super-admin') && isset($request['roles']) ) {
+            
+            foreach ($request['roles'] as $value) {
                 if ( $admin_current->hasRole(Role::find($value)->slug) ) {
                     continue;
                 }

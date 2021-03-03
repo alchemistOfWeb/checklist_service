@@ -28,7 +28,6 @@ class PermissionSeeder extends Seeder
         $this->createPermission('Edit admins');
         $this->createPermission('Delete admins');
         $this->createPermission('Manage admin roles');
-        $this->createPermission('Manage admin permissions');
 
         $this->createPermission('Delete checklists');
     }

@@ -39,6 +39,20 @@ class AdminPolicy
     }
 
     /**
+     * Determine whether the admin can update the model.
+     *
+     * @param  \App\Models\User  $admin
+     * @param  \App\Models\Admin  $admin_model
+     * @return mixed
+     */
+    public function update(Admin $admin)
+    {
+        return $admin->hasAnyPermission('edit-admins', 'manage-admin-roles')
+            ? Response::allow()
+            : Response::deny("You don't have permission to edit admins");
+    }
+
+    /**
      * Determine whether the admin can edit manage admin roles.
      *
      * @param  \App\Models\User  $admin
@@ -47,12 +61,15 @@ class AdminPolicy
      */
     public function manageRoles(Admin $admin_current, Admin $admin)
     {
-        return 
-            $admin_current->hasPermissionTo('manage-admin-roles') 
-            && 
-            (!$admin->hasRole('super-admin') || $admin_current->hasRole('super-admin'))
-            ? Response::allow()
-            : Response::deny("You don't have permission to manage roles of admin");
+        if ( !$admin_current->hasPermissionTo('manage-admin-roles') ) {
+            return Response::deny("You don't have permission to manage roles of admins");
+        }
+
+        if ( $admin->hasRole('super-admin') && !$admin_current->hasRole('super-admin') ) {
+            return Response::deny("You don't have permission to manage roles of this admin");
+        }
+
+        return Response::allow();
     }
     
     /**

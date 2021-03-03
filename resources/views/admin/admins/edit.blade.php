@@ -14,7 +14,12 @@
         @csrf
         <div class="form-group">
             <label class="my-1 mr-2" for="select-roles">Roles:</label>
-            <div class="d-flex flex-wrap" id="role-list">  
+            <div class="d-flex flex-wrap" id="role-list"> 
+                
+                @haspermission('manage-admin-roles')
+                    <input hidden name="special" hidden>
+                @endpermission
+
                 @foreach ($admin->roles as $role)
 
                     <h4 class="m-1 attaching-block">
@@ -63,7 +68,11 @@
             name="name"
             value="{{$admin->name}}"
             aria-describedby="nameHelp" 
-            placeholder="Enter name">
+            placeholder="Enter name"
+            @nopermission('edit-admins')
+                disabled
+            @endpermission
+            >
             <small id="nameHelp" class="form-text text-muted">enter min 6 letters</small>
         </div>
 
@@ -76,7 +85,11 @@
             name="email"
             value="{{$admin->email}}"
             aria-describedby="emailHelp" 
-            placeholder="Enter email">
+            placeholder="Enter email"
+            @nopermission('edit-admins')
+                disabled
+            @endpermission
+            >
             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         </div>
 
