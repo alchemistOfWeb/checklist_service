@@ -18,7 +18,7 @@ class IsBanned
     public function handle(Request $request, Closure $next)
     {
         if ($request->user()->status == User::IS_BANNED) {
-            return response()->json("Locked. You're a banana.", 403);
+            return response()->json("Locked. You're banned.", 403);
         }
 
         return $next($request);
