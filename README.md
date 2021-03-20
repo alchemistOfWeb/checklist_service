@@ -37,6 +37,7 @@ PHP с использованием фреймворка (Yii2 или Laravel)
 ## Установка
 в терминале:
 
+```tex
     cd нужный каталог
 
     git clone https://github.com/alchemistOfWeb/checklist_service.git
@@ -44,22 +45,24 @@ PHP с использованием фреймворка (Yii2 или Laravel)
     cd checklist_service
 
     composer update
+```
     
 далее копируем файл .env.example и переименовываем в просто .env 
 заполняем нужные поля: 
-
+```tex
 DB_DATABASE=
 
 DB_USERNAME=
 
 DB_PASSWORD=
-
+```
 
 дальше, если хотите получить тестовые данные, используйте следующие команды(информация о доступах указана именно для тестовых пользователей):
-
+```tex
     php artisan migrate 
     
     php artisan db:seed
+```
 
 также по умолчанию в корне проекта настроен файл .htaccess, который автоматичеки перенаправляет все запросы с корня в public, что исключает необходимость в использовании команды `php artisan serve`
 
@@ -156,34 +159,34 @@ DB_PASSWORD=
     - post: http://checklist_service/login
 
     json: 
-    `
+    ```json
     {
         "email":"useremail",
         "password":"userpassword"
     }
-    `
+    ```
 
     - post: http://checklist_service/register
 
     json: 
-    `
+    ```json
     {
         "email":"useremail",
         "name":"username",
         "password":"userpassword"
     }
-    `
+    ```
 
 - Создать/Удалить чек лист (учитывать настройки возможного кол-ва);
     - post: http://checklist_service/api/checklists
 
     json: 
-    `
+    ```json
     {
         "title":"sometitle",
         "description":"some description"
     }
-    `
+    ```
 
     - delete: http://checklist_service/api/checklists/{cid}
 
@@ -191,11 +194,11 @@ DB_PASSWORD=
     - post: http://checklist_service/api/checklists/{cid}/tasks
 
     json: 
-    `
+    ```json
     {
         "text":"What we need to do"
     }
-    `
+    ```
 
     - delete: http://checklist_service/api/checklists/{cid}/tasks/{tid}
 
